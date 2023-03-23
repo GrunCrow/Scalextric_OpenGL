@@ -1,0 +1,1 @@
+objparser.TokenMgrError: Lexical error at line 1, column 1.  Encountered: "" (0), after : ""
