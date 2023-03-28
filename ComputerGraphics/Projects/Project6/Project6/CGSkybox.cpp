@@ -115,6 +115,15 @@ void CGSkybox::InitTexture(GLuint target, const char* filename)
 	glTexImage2D(target, 0, GL_RGBA8, nWidth, nHeight,
 		0, GL_BGRA, GL_UNSIGNED_BYTE, (void*)FreeImage_GetBits(pImage));
 
+	// glGenerateMipmap // call after gltextimage2d
+	// missing the uniform upload for the active texture texture
+	// Use the shader glUseShader(shader).
+	//Fetch the uniform location for the name 'm_Texture'.
+	// Upload the shader uniform for the active texture(in your case you can do that at initialization once using 'glUniformi'), it can be 0 in your case since you're only using one texture.
+	// Set the active texture 'glActiveTexture(GL_TEXTURE0)' to the uniform uploaded, not forgetting to also bind your texture
+
+	// Solved! I mistaken glTexParamateri
+
 	FreeImage_Unload(pImage);
 }
 
