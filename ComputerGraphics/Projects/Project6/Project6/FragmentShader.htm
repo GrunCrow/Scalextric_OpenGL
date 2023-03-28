@@ -1,8 +1,8 @@
 #version 400
 
- in vec3 Position;
- in vec3 Normal;
- in vec2 TexCoord;
+in vec3 Position;
+in vec3 Normal;
+in vec2 TexCoord;
 in vec4 ShadowCoord;
 
 uniform sampler2D BaseTex;
@@ -24,6 +24,7 @@ uniform sampler2D ShadowMap;
 	vec3 Ks;
 	float Shininess;
  };
+
  uniform MaterialInfo Material;
 
 struct FogInfo {
@@ -58,15 +59,14 @@ vec3 fog(vec3 Color) {
 }
 
 
- uniform samplerCube CubemapTex;
- uniform bool DrawSkybox;
+uniform samplerCube CubemapTex;
+uniform bool DrawSkybox;
 
 subroutine void RenderPassType();
 subroutine uniform RenderPassType RenderPass;
 
 subroutine (RenderPassType)
-void shadeWithShadow()
-{
+void shadeWithShadow(){
   vec3 TexColor = vec3(texture(BaseTex,TexCoord));
   vec3 ambient = Light.La * Material.Ka*TexColor;
   vec3 diffAndSpec = ads(TexColor);
@@ -79,18 +79,15 @@ void shadeWithShadow()
 
   if(shadowDepth < ShadowCoordZ) shadow = 0;
 
-  FragColor = vec4(shadow * diffAndSpec+ ambient + FogColor, 1.0);
+  FragColor = vec4(1,0,0,1); //vec4(shadow * diffAndSpec+ ambient + FogColor, 1.0);
 
 }
 
- void main()
- {
-   if(DrawSkybox)
-   {
-    FragColor = texture(CubemapTex,Position);
+ void main(){
+   if(DrawSkybox){
+		FragColor = vec4(1,0,0,1); //texture(CubemapTex,Position);
    }
-   else
-   {
- 	RenderPass();
+   else{
+		RenderPass();
    }
  }

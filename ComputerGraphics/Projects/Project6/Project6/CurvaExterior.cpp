@@ -14,7 +14,7 @@ CurvaExterior::CurvaExterior(GLint p, GLint m, GLfloat r0, GLfloat r1, GLuint co
 	mtl0->SetDifusseReflect(0.0f, 1.0f, 1.0f);
 	mtl0->SetSpecularReflect(1.0f, 1.0f, 1.0f);
 	mtl0->SetShininess(20.0f);
-	// Por dificultades al aplicar la textura de la curva, se aplicará la de la recta
+
 	// mtl0->InitTexture("C:/ComputerGraphics/textures/Road/CurvaExterior.png");
 	mtl0->InitTexture("C:/ComputerGraphics/textures/Road/RectaStd.png");
 	
