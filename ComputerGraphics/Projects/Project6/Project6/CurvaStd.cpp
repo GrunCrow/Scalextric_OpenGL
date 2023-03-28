@@ -14,7 +14,8 @@ CurvaStd::CurvaStd(GLint p, GLint m, GLfloat r0, GLfloat r1, GLuint contador, GL
 	mtl0->SetDifusseReflect(0.0f, 1.0f, 1.0f);
 	mtl0->SetSpecularReflect(1.0f, 1.0f, 1.0f);
 	mtl0->SetShininess(20.0f);
-	mtl0->InitTexture("C:/ComputerGraphics/textures/Road/CurvaStd.png");
+	// mtl0->InitTexture("C:/ComputerGraphics/textures/Road/CurvaStd.png");
+	mtl0->InitTexture("C:/ComputerGraphics/textures/Road/RectaStd.png");
 
 	piece = new Pieza_CurvaSTD(mtl0, p, m, r0, r1,vx1,vx2,vz1,vz2);
 
