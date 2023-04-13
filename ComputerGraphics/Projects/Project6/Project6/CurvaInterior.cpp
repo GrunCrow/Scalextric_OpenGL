@@ -14,7 +14,7 @@ CurvaInterior::CurvaInterior(GLint p, GLint m, GLfloat r0, GLfloat r1,GLuint con
 	mtl0->SetSpecularReflect(1.0f, 1.0f, 1.0f);
 	mtl0->SetShininess(20.0f);
 	// mtl0->InitTexture("C:/ComputerGraphics/textures/Road/CurvaInterior.png");
-	mtl0->InitTexture("C:/ComputerGraphics/textures/Road/RectaStd.png");
+	mtl0->InitTexture("textures/Road/RectaStd.jpg");
 
 	piece = new Pieza_CurvaInt(mtl0, p, m, r0, r1,vx1,vx2,vz1,vz2);
 }

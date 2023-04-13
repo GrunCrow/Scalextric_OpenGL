@@ -80,6 +80,7 @@ void shadeWithShadow(){
   if(shadowDepth < ShadowCoordZ) shadow = 0;
 
   FragColor = vec4(shadow * diffAndSpec+ ambient + FogColor, 1.0);
+  // FragColor = vec4((shadow * diffAndSpec+ ambient + FogColor)/255.0, 1.0);
   // FragColor = vec4(1,0,0,1); // Para mostrar todo rojo -> si se muestra el problema está en el shader
 
 }
@@ -87,6 +88,7 @@ void shadeWithShadow(){
  void main(){
    if(DrawSkybox){
 		FragColor = texture(CubemapTex,Position);
+		// FragColor = texture(CubemapTex/255.0,Position);
 		// FragColor = vec4(1,0,0,1); // Para mostrar todo rojo -> si se muestra el problema está en el shader
    }
    else{

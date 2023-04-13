@@ -13,7 +13,7 @@ Recta::Recta(GLfloat l1, GLfloat l2, GLuint contador,GLfloat &vx1, GLfloat &vx2,
 	mtl0->SetDifusseReflect(0.0f, 1.0f, 1.0f);
 	mtl0->SetSpecularReflect(1.0f, 1.0f, 1.0f);
 	mtl0->SetShininess(20.0f);
-	mtl0->InitTexture("C:/ComputerGraphics/textures/Road/RectaStd.png");
+	mtl0->InitTexture("textures/Road/RectaStd.jpg");
 
 	piece = new Pieza_Recta(mtl0, l1, l2,vx1,vx2,vz1,vz2);
 	}

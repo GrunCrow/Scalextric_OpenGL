@@ -61,9 +61,12 @@ void CGModel::Initialize(GLsizei w, GLsizei h)
 	GLuint textureId;
 	glGenTextures(1, &textureId);
 	glActiveTexture(GL_TEXTURE0);
-	InitTexture(textureId, "C:/ComputerGraphics/textures/Road/RectaStd.png");
-	program->SetUniformI("BaseTex", 0);
+	// AÑADIDO:
+	glBindTexture(GL_TEXTURE_2D, textureId);
+	glEnable(GL_TEXTURE_2D);
 
+	InitTexture(textureId, "textures/Road/RectaStd.jpg");
+	program->SetUniformI("BaseTex", 0);
 
 	// Parte para crear la "camera"
 	camera = new CGCamera();
@@ -72,7 +75,6 @@ void CGModel::Initialize(GLsizei w, GLsizei h)
 
 	posBeg = camera->GetPosition();
 	dirBeg = camera->GetDirection();
-
 
 	// Parte para crear la matriz View de la "camera"
 	view = camera->ViewMatrix();
@@ -96,7 +98,7 @@ void CGModel::Initialize(GLsizei w, GLsizei h)
 
 	// Parte para las opciones del dibujo
 	glEnable(GL_DEPTH_TEST);
-	glEnable(GL_CULL_FACE);
+	glEnable(GL_CULL_FACE);	
 	glFrontFace(GL_CCW);
 	glPolygonMode(GL_FRONT, GL_FILL);
 	glDepthFunc(GL_LEQUAL);
@@ -136,6 +138,9 @@ void CGModel::Finalize()
 	delete program;
 	delete Coche1;
 	delete Coche2;
+
+	// AÑADIDO
+	//glDisable(GL_TEXTURE_2D);
 }
 
 
@@ -238,7 +243,8 @@ void CGModel::Update()
 
 		if (Pistas[Indice_1][0] == 4)
 		{
-			if (velocidad > 7 && velocidad != 0) velocidad - 3;
+			if (velocidad > 7 && velocidad != 0)
+				velocidad = velocidad - 3;
 
 			if (t == 1)
 			{
@@ -631,13 +637,13 @@ void CGModel::Update()
 	if (seleccion == 1)
 	{
 		matseg = Coche1->GetLocation();
-		camera->SetPosition(matseg[3][0], matseg[3][1] + 1.0f, matseg[3][2]);
+		camera->SetPosition(matseg[3][0]-2.0f, matseg[3][1] + 2.0f, matseg[3][2]);
 		camera->SetDirection(matseg[1][0], matseg[1][1], matseg[1][2], matseg[2][0], matseg[2][1], matseg[2][2]);
 	}
 	if (seleccion == 2)
 	{
 		matseg = Coche2->GetLocation();
-		camera->SetPosition(matseg[3][0], matseg[3][1] + 1.0f, matseg[3][2]);
+		camera->SetPosition(matseg[3][0]-2.0f, matseg[3][1] + 2.0f, matseg[3][2]);
 		camera->SetDirection(matseg[1][0], matseg[1][1], matseg[1][2], matseg[2][0], matseg[2][1], matseg[2][2]);
 	}
 }
@@ -783,6 +789,7 @@ void CGModel::KeyboardAction(int virtualKey)
 		velocidad = 5;
 		break;
 	}
+
 	
 	// */
 

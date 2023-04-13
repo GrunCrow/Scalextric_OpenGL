@@ -89,12 +89,12 @@ void CGSkybox::InitCubemap()
 
 	glGenTextures(1, &cubemap);
 	glBindTexture(GL_TEXTURE_CUBE_MAP, cubemap);
-	InitTexture(GL_TEXTURE_CUBE_MAP_POSITIVE_X, "C:/ComputerGraphics/textures/Sky/Teide/posz.jpg");
-	InitTexture(GL_TEXTURE_CUBE_MAP_NEGATIVE_X, "C:/ComputerGraphics/textures/Sky/Teide/negz.jpg");
-	InitTexture(GL_TEXTURE_CUBE_MAP_POSITIVE_Y, "C:/ComputerGraphics/textures/Sky/Teide/posy.jpg");
-	InitTexture(GL_TEXTURE_CUBE_MAP_NEGATIVE_Y, "C:/ComputerGraphics/textures/Sky/Teide/negy.jpg");
-	InitTexture(GL_TEXTURE_CUBE_MAP_POSITIVE_Z, "C:/ComputerGraphics/textures/Sky/Teide/posx.jpg");
-	InitTexture(GL_TEXTURE_CUBE_MAP_NEGATIVE_Z, "C:/ComputerGraphics/textures/Sky/Teide/negx.jpg");
+	InitTexture(GL_TEXTURE_CUBE_MAP_POSITIVE_X, "textures/Sky/Teide/posz.jpg");
+	InitTexture(GL_TEXTURE_CUBE_MAP_NEGATIVE_X, "textures/Sky/Teide/negz.jpg");
+	InitTexture(GL_TEXTURE_CUBE_MAP_POSITIVE_Y, "textures/Sky/Teide/posy.jpg");
+	InitTexture(GL_TEXTURE_CUBE_MAP_NEGATIVE_Y, "textures/Sky/Teide/negy.jpg");
+	InitTexture(GL_TEXTURE_CUBE_MAP_POSITIVE_Z, "textures/Sky/Teide/posx.jpg");
+	InitTexture(GL_TEXTURE_CUBE_MAP_NEGATIVE_Z, "textures/Sky/Teide/negx.jpg");
 
 	// Typical cube map settings
 	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
