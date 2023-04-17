@@ -62,8 +62,8 @@ void CGModel::Initialize(GLsizei w, GLsizei h)
 	glGenTextures(1, &textureId);
 	glActiveTexture(GL_TEXTURE0);
 	// AÑADIDO:
-	glBindTexture(GL_TEXTURE_2D, textureId);
-	glEnable(GL_TEXTURE_2D);
+	//glBindTexture(GL_TEXTURE_2D, textureId);
+	//glEnable(GL_TEXTURE_2D);
 
 	InitTexture(textureId, "textures/Road/RectaStd.jpg");
 	program->SetUniformI("BaseTex", 0);
@@ -634,16 +634,19 @@ void CGModel::Update()
 			}
 		}
 	}
-	if (seleccion == 1)
-	{
+	if (seleccion == 1){
 		matseg = Coche1->GetLocation();
 		camera->SetPosition(matseg[3][0]-2.0f, matseg[3][1] + 2.0f, matseg[3][2]);
 		camera->SetDirection(matseg[1][0], matseg[1][1], matseg[1][2], matseg[2][0], matseg[2][1], matseg[2][2]);
 	}
-	if (seleccion == 2)
-	{
+	if (seleccion == 2){
 		matseg = Coche2->GetLocation();
 		camera->SetPosition(matseg[3][0]-2.0f, matseg[3][1] + 2.0f, matseg[3][2]);
+		camera->SetDirection(matseg[1][0], matseg[1][1], matseg[1][2], matseg[2][0], matseg[2][1], matseg[2][2]);
+	}
+	if (seleccion == 4){ // camara libre
+		int matseg[3][3] = {0};
+		camera->SetPosition(matseg[3][0] - 2.0f, matseg[3][1] + 2.0f, matseg[3][2]);
 		camera->SetDirection(matseg[1][0], matseg[1][1], matseg[1][2], matseg[2][0], matseg[2][1], matseg[2][2]);
 	}
 }
@@ -726,68 +729,91 @@ void CGModel::KeyboardAction(int virtualKey)
 
 	
 	
-		switch (virtualKey)
-	{
-	case GLFW_KEY_UP: //VK_UP:
-		camera->TurnDown();
-		break;
-	case GLFW_KEY_DOWN: //VK_DOWN:
-		camera->TurnUp();
-		break;
-	case GLFW_KEY_LEFT: //VK_LEFT:
-		camera->TurnCCW();
-		break;
-	case GLFW_KEY_RIGHT: //VK_RIGHT:
-		camera->TurnCW();
-		break;
-	case GLFW_KEY_S: //'S':
-		seleccion = 1;
-		break;
-	case GLFW_KEY_RIGHT_BRACKET: //VK_OEM_PLUS:
-		camera->SetMoveStep(camera->GetMoveStep() + 2.0f);
-		break;
-	case GLFW_KEY_MINUS: //VK_OEM_MINUS:
-		camera->SetMoveStep(camera->GetMoveStep() - 2.0f);
-		break;
-	case GLFW_KEY_Q: //'Q':
-		if (velocidad < 10)
-		{
-			velocidad++;
-		}
-		break;
-	case GLFW_KEY_A: //'A':
-		if (velocidad > 0)
-		{
-			velocidad--;
-		}
-		break;
-	case GLFW_KEY_0: //'O':
-		if (velocidad2 < 10)
-		{
-			velocidad2++;
-		}
-		break;
-	case GLFW_KEY_L: //'L':
-		if (velocidad2 > 0)
-		{
-			velocidad2--;
-		}
-		break;
-	case GLFW_KEY_F1: //VK_F1:
-		seleccion = 3;
-		camera->SetTurnStep(90);
-		camera->SetPosition(-70, 900, 130);
-		camera->SetTurnStep(0.1f);
-		break;
-	case GLFW_KEY_F2: //VK_F2:
-		seleccion = 1;
-		break;
-	case GLFW_KEY_F3: //VK_F3:
-		seleccion = 2;
-		break;
-	case GLFW_KEY_C: //'C':
-		velocidad = 5;
-		break;
+	switch (virtualKey){
+		// MOVIMIENTO IZQ-DCHA- ARRIBA-ABAJO
+		case GLFW_KEY_UP: //VK_UP:
+			camera->TurnDown();
+			break;
+		case GLFW_KEY_DOWN: //VK_DOWN:
+			camera->TurnUp();
+			break;
+		case GLFW_KEY_LEFT: //VK_LEFT:
+			camera->TurnLeft();
+			//camera->TurnCCW();
+			break;
+		case GLFW_KEY_RIGHT: //VK_RIGHT:
+			camera->TurnRight();
+			break;
+
+		// GIRAR
+		case GLFW_KEY_Z: //VK_LEFT:
+			//camera->TurnLeft();
+			camera->TurnCCW();
+			break;
+		case GLFW_KEY_X: //VK_RIGHT:
+			camera->TurnCW();
+			break;
+		
+		// SELECCION
+		case GLFW_KEY_S: //'S':
+			seleccion = 1;
+			break;
+
+		// MOVIMIENTO RECTO
+		case GLFW_KEY_PERIOD: //VK_OEM_PLUS:
+			camera->SetMoveStep(camera->GetMoveStep() + 2.0f);
+			break;
+		case GLFW_KEY_COMMA: //VK_OEM_MINUS:
+			camera->SetMoveStep(camera->GetMoveStep() - 2.0f);
+			break;
+
+		// VELOCIDADES
+		case GLFW_KEY_Q: //'Q':
+			if (velocidad < 10){
+				velocidad++;
+			}
+			break;
+		case GLFW_KEY_A: //'A':
+			if (velocidad > 0){
+				velocidad--;
+			}
+			break;
+		case GLFW_KEY_0: //'O':
+			if (velocidad2 < 10){
+				velocidad2++;
+			}
+			break;
+		case GLFW_KEY_L: //'L':
+			if (velocidad2 > 0){
+				velocidad2--;
+			}
+			break;
+
+		// VISTAS
+		case GLFW_KEY_F1: //VK_F1:
+			seleccion = 3;
+			camera->SetTurnStep(90);
+			camera->SetPosition(-70, 900, 130);
+			camera->SetTurnStep(0.1f);
+			break;
+		case GLFW_KEY_F2: //VK_F2:
+			seleccion = 1;
+			break;
+		case GLFW_KEY_F3: //VK_F3:
+			seleccion = 2;
+			break;
+		case GLFW_KEY_F4: //VK_F3:
+			seleccion = 3;
+			camera->SetTurnStep(100);
+			// camera->SetPosition(-70, 900, 130);
+			//camera->SetPosition(camera->GetPosition());
+			camera->SetTurnStep(1.0f);
+			break;
+
+		// AMBOS A LA VEZ PARA EL TEST DE LA CURVATURA
+		case GLFW_KEY_C: //'C':
+			velocidad = 5;
+			break;
 	}
 
 	
