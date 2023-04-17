@@ -762,9 +762,13 @@ void CGModel::KeyboardAction(int virtualKey)
 		// MOVIMIENTO RECTO
 		case GLFW_KEY_PERIOD: //VK_OEM_PLUS:
 			camera->SetMoveStep(camera->GetMoveStep() + 2.0f);
+			//glm::vec3 pos = camera->GetPosition();
+			//camera->SetPosition(pos.x +1.0f, pos.y, pos.z);
 			break;
 		case GLFW_KEY_COMMA: //VK_OEM_MINUS:
 			camera->SetMoveStep(camera->GetMoveStep() - 2.0f);
+			//glm::vec3 pos = camera->GetPosition();
+			//camera->SetPosition(pos.x + 1.0f, pos.y, pos.z);
 			break;
 
 		// VELOCIDADES
@@ -778,7 +782,7 @@ void CGModel::KeyboardAction(int virtualKey)
 				velocidad--;
 			}
 			break;
-		case GLFW_KEY_0: //'O':
+		case GLFW_KEY_O: //'O':
 			if (velocidad2 < 10){
 				velocidad2++;
 			}
@@ -812,7 +816,9 @@ void CGModel::KeyboardAction(int virtualKey)
 
 		// AMBOS A LA VEZ PARA EL TEST DE LA CURVATURA
 		case GLFW_KEY_C: //'C':
-			velocidad = 5;
+			vel = 5;
+			velocidad = vel;
+			velocidad2 = vel;
 			break;
 	}
 

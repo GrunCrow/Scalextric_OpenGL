@@ -40,7 +40,7 @@ C:\Users\albam\OneDrive - UNIVERSIDAD DE HUELVA\2. Universidad\4º Curso\2. 2º 
 C:\Users\albam\OneDrive - UNIVERSIDAD DE HUELVA\2. Universidad\4º Curso\2. 2º Cuatrimestre\Realidad Virtual\Prácticas\practica06\ComputerGraphics\Projects\Project6\Project6\CGModel.cpp(650,49): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
 C:\Users\albam\OneDrive - UNIVERSIDAD DE HUELVA\2. Universidad\4º Curso\2. 2º Cuatrimestre\Realidad Virtual\Prácticas\practica06\ComputerGraphics\Projects\Project6\Project6\CGModel.cpp(650,35): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
   Generating code
-  2 of 342 functions ( 0.6%) were compiled, the rest were copied from previous compilation.
+  1 of 342 functions ( 0.3%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
     7 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
