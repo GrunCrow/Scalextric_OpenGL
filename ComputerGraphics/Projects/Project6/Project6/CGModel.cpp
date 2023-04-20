@@ -816,9 +816,9 @@ void CGModel::KeyboardAction(int virtualKey)
 
 		// AMBOS A LA VEZ PARA EL TEST DE LA CURVATURA
 		case GLFW_KEY_C: //'C':
-			vel = 5;
-			velocidad = vel;
-			velocidad2 = vel;
+			//vel = 5;
+			velocidad = 5;
+			velocidad2 = 5;
 			break;
 	}
 

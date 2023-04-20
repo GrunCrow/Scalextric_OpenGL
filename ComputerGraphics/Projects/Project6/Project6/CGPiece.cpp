@@ -20,6 +20,7 @@ CGPiece::~CGPiece()
 
 void CGPiece::InitBuffers()
 {
+	location = glm::mat4(1.0f);
 
 	// Create the Vertex Array Object
 	glGenVertexArrays(1, &VAO);

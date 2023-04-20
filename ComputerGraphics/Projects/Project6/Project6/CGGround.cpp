@@ -7,6 +7,7 @@
 
 CGGround::CGGround(GLfloat l1, GLfloat l2, GLuint contador, GLfloat& vx1, GLfloat& vx2, GLfloat& vz1, GLfloat& vz2)
 {	
+	model = glm::mat4(1.0f);
 
 	glActiveTexture(GL_TEXTURE1);
 
