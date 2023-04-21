@@ -33,7 +33,7 @@
     <ClCompile Include="CGScene.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
-    <ClCompile Include="CGLight.cpp">
+    <ClCompile Include="Light.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
     <ClCompile Include="CGMaterial.cpp">
@@ -104,7 +104,7 @@
     <ClInclude Include="CGScene.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
-    <ClInclude Include="CGLight.h">
+    <ClInclude Include="Light.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
     <ClInclude Include="CGMaterial.h">

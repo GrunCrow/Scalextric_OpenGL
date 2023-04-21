@@ -6,7 +6,7 @@
 #include <glm/glm.hpp>
 #include "CGShaderProgram.h"
 #include "CGFigure.h"
-#include "CGLight.h"
+#include "Light.h"
 #include "CGSkybox.h"
 
 class CGScene {
@@ -26,7 +26,7 @@ private:
 	CGFigure* curvaStd[17];
 	CGFigure* curvaExterior[14];
 	CGFigure* coche;
-	CGLight* light;
+	Light* light;
 	CGSkybox* skybox;
 };
 

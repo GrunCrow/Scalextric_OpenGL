@@ -26,8 +26,8 @@
 #include "car.h"
 
 
-
-
+#include <iostream>
+#include <string>
 
 
 #define LongRecta 35.0f
@@ -636,17 +636,12 @@ void CGModel::Update()
 	}
 	if (seleccion == 1){
 		matseg = Coche1->GetLocation();
-		camera->SetPosition(matseg[3][0]-2.0f, matseg[3][1] + 2.0f, matseg[3][2]);
+		camera->SetPosition(matseg[3][0]-5.0f, matseg[3][1] + 2.0f, matseg[3][2]);
 		camera->SetDirection(matseg[1][0], matseg[1][1], matseg[1][2], matseg[2][0], matseg[2][1], matseg[2][2]);
 	}
 	if (seleccion == 2){
 		matseg = Coche2->GetLocation();
-		camera->SetPosition(matseg[3][0]-2.0f, matseg[3][1] + 2.0f, matseg[3][2]);
-		camera->SetDirection(matseg[1][0], matseg[1][1], matseg[1][2], matseg[2][0], matseg[2][1], matseg[2][2]);
-	}
-	if (seleccion == 4){ // camara libre
-		int matseg[3][3] = {0};
-		camera->SetPosition(matseg[3][0] - 2.0f, matseg[3][1] + 2.0f, matseg[3][2]);
+		camera->SetPosition(matseg[3][0]-5.0f, matseg[3][1] + 2.0f, matseg[3][2]);
 		camera->SetDirection(matseg[1][0], matseg[1][1], matseg[1][2], matseg[2][0], matseg[2][1], matseg[2][2]);
 	}
 }
@@ -661,6 +656,10 @@ void CGModel::Update()
 //
 void CGModel::KeyboardAction(int virtualKey)
 {
+	GLfloat cam_pos_x;
+	GLfloat cam_pos_y;
+	GLfloat cam_pos_z;
+	GLfloat cam_turn_step;
 	//Método de respuesta para las teclas (Asociar teclas a ciertas acciones)
 	
 	/*switch (virtualKey)
@@ -797,8 +796,19 @@ void CGModel::KeyboardAction(int virtualKey)
 		case GLFW_KEY_F1: //VK_F1:
 			seleccion = 3;
 			camera->SetTurnStep(90);
+			camera->TurnDown();
 			camera->SetPosition(-70, 900, 130);
-			camera->SetTurnStep(0.1f);
+			camera->SetTurnStep(0.0f);
+			break;
+		case GLFW_KEY_F5: //VK_F1:
+			cam_pos_x = camera->GetPosition_X();
+			cam_pos_y = camera->GetPosition_Y();
+			cam_pos_z = camera->GetPosition_Z();
+			cam_turn_step = camera->GetTurnStep();
+			// cam_direction = camera->GetDirection();
+			std::cout << cam_pos_x << " " << cam_pos_y << " " << cam_pos_z << std::endl;
+			std::cout << cam_turn_step << std::endl;
+			//std::cout << (camera->GetPosition()) << std::endl;
 			break;
 		case GLFW_KEY_F2: //VK_F2:
 			seleccion = 1;

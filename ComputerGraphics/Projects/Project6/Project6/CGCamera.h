@@ -14,6 +14,9 @@ public:
     void SetTurnStep(GLfloat step);
 
     glm::vec3 GetPosition();
+    GLfloat GetPosition_X();
+    GLfloat GetPosition_Y();
+    GLfloat GetPosition_Z();
     glm::vec3 GetDirection();
     glm::vec3 GetUpDirection();
     GLfloat GetMoveStep();

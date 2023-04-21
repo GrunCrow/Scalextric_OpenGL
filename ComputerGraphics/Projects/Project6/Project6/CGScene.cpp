@@ -39,7 +39,7 @@ CGScene::CGScene()
 	glm::vec3 Ldir = glm::vec3(1.0f, -0.8f, -1.0f);
 	Ldir = glm::normalize(Ldir);
 
-	light = new CGLight();
+	light = new Light();
 	light->SetLightDirection(Ldir);
 	light->SetAmbientLight(glm::vec3(0.2f, 0.2f, 0.2f));
 	light->SetDifusseLight(glm::vec3(0.8f, 0.8f, 0.8f));

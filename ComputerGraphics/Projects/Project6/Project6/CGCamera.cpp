@@ -110,6 +110,21 @@ glm::vec3 CGCamera::GetPosition()
     return Pos;
 }
 
+GLfloat CGCamera::GetPosition_X()
+{
+    return Pos.x;
+}
+
+GLfloat CGCamera::GetPosition_Y()
+{
+    return Pos.y;
+}
+
+GLfloat CGCamera::GetPosition_Z()
+{
+    return Pos.z;
+}
+
 //
 // FUNCIÓN: CGCamera::GetDirection()
 //
