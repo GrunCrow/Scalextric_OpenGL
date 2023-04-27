@@ -26,7 +26,7 @@ private:
 	glm::vec3 posBeg;
 	glm::vec3 dirBeg;
 	glm::vec3 upBeg;
-	glm::mat4 matseg;
+	glm::mat4 loc;
 	glm::mat4 projection;
 	glm::mat4 view;
 

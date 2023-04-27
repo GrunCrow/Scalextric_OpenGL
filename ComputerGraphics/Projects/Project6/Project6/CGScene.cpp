@@ -61,13 +61,11 @@ CGScene::CGScene()
 	GLdouble x = 0;
 	GLdouble z = 0;
 
-	for (int i = 0; i < 74; i++)
-	{
+	for (int i = 0; i < 74; i++){
 		int tipo = pistas[i][0];
 		int t = pistas[i][1];
-		switch (tipo)
-		{
-		case 1:
+		switch (tipo){
+		case 1:	// Recta Estandar
 			if (RS == 0)
 			{
 				recta[RS] = new Recta(LongRecta, 15.6f / 2, contador, vx1, vx2, vz1, vz2);
@@ -98,7 +96,7 @@ CGScene::CGScene()
 
 
 			break;
-		case 2:
+		case 2: // media recta
 			mediaRecta[MR] = new Recta(LongMediaRecta, 15.6f / 2, contador, vx1, vx2, vz1, vz2);
 			mediaRecta[MR]->setLocation(aux);
 			mediaRecta[MR]->desplazamiento_recta(x, z, LongMediaRecta);
@@ -108,7 +106,7 @@ CGScene::CGScene()
 			MR++;
 			contador++;
 			break;
-		case 3:
+		case 3: // cuarto de recta
 			cuartoRecta = new Recta(LongCuartoRecta, 15.6f / 2, contador, vx1, vx2, vz1, vz2);
 			cuartoRecta->setLocation(aux);
 			cuartoRecta->desplazamiento_recta(x, z, LongCuartoRecta);
@@ -118,7 +116,7 @@ CGScene::CGScene()
 			CR++;
 			contador++;
 			break;
-		case 4:
+		case 4: //4 = curva interior  
 			if (t == 1)
 			{
 				curvaInterior[CI] = new CurvaInterior(1, 5.0f, 5.8f, 21.4f, contador, vx1, vx2, vz1, vz2);
@@ -147,7 +145,7 @@ CGScene::CGScene()
 			}
 
 			break;
-		case 5:
+		case 5: //5 = curva exterior 
 			if (t == 1)
 			{
 				curvaExterior[CE] = new CurvaExterior(1, 5.0f, 37, 52.6, contador, vx1, vx2, vz1, vz2);
@@ -175,7 +173,7 @@ CGScene::CGScene()
 				CE++;
 			}
 			break;
-		case 6:
+		case 6: //6 = curva estandar
 			if (t == 1)
 			{
 				curvaStd[CS] = new CurvaStd(1, 5, 21.4, 37.0, contador, vx1, vx2, vz1, vz2);

@@ -16,8 +16,7 @@ void CGFigure::SetLocation(glm::mat4 loc)
 	model = loc;
 }
 
-glm::mat4 CGFigure::GetLocation()
-{
+glm::mat4 CGFigure::GetLocation(){
 	return model;
 }
 

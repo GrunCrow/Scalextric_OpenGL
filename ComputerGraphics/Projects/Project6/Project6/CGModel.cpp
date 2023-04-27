@@ -108,7 +108,7 @@ void CGModel::Initialize(GLsizei w, GLsizei h)
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_POLYGON_SMOOTH);
-	matseg = Coche1->GetLocation();
+	loc = Coche1->GetLocation();
 }
 
 
@@ -635,14 +635,18 @@ void CGModel::Update()
 		}
 	}
 	if (seleccion == 1){
-		matseg = Coche1->GetLocation();
-		camera->SetPosition(matseg[3][0]-5.0f, matseg[3][1] + 2.0f, matseg[3][2]);
-		camera->SetDirection(matseg[1][0], matseg[1][1], matseg[1][2], matseg[2][0], matseg[2][1], matseg[2][2]);
+		loc = Coche1->GetLocation();
+		//loc = glm::translate(loc, glm::vec3(0, 2, -5));
+		//view = glm::inverse(loc);
+		//camera->SetPosition(view[0], view[1], view[2]);
+		camera->SetPosition(loc[3][0] - 4.0f, loc[3][1] + 2.0f, loc[3][2]);
+		camera->SetDirection(loc[1][0], loc[1][1], loc[1][2], loc[2][0], loc[2][1], loc[2][2]);
+		// get location del coche y modificar en y y z -> getloca del coche, transl a lo que se quiera modif y luego la inversa
 	}
 	if (seleccion == 2){
-		matseg = Coche2->GetLocation();
-		camera->SetPosition(matseg[3][0]-5.0f, matseg[3][1] + 2.0f, matseg[3][2]);
-		camera->SetDirection(matseg[1][0], matseg[1][1], matseg[1][2], matseg[2][0], matseg[2][1], matseg[2][2]);
+		loc = Coche2->GetLocation();
+		camera->SetPosition(loc[3][0] - 5.0f, loc[3][1] + 2.0f, loc[3][2]);
+		camera->SetDirection(loc[1][0], loc[1][1], loc[1][2], loc[2][0], loc[2][1], loc[2][2]);
 	}
 }
 
@@ -661,72 +665,7 @@ void CGModel::KeyboardAction(int virtualKey)
 	GLfloat cam_pos_z;
 	GLfloat cam_turn_step;
 	//Método de respuesta para las teclas (Asociar teclas a ciertas acciones)
-	
-	/*switch (virtualKey)
-	{
-	case VK_UP:
-		camera->TurnDown();
-		break;
-	case VK_DOWN:
-		camera->TurnUp();
-		break;
-	case VK_LEFT:
-		camera->TurnCCW();
-		break;
-	case VK_RIGHT:
-		camera->TurnCW();
-		break;
-	case 'S':
-		seleccion = 1;
-		break;
-	case VK_OEM_PLUS:
-		camera->SetMoveStep(camera->GetMoveStep() + 2.0f);
-		break;
-	case VK_OEM_MINUS:
-		camera->SetMoveStep(camera->GetMoveStep() - 2.0f);
-		break;
-	case 'Q':
-		if (velocidad < 10)
-		{
-			velocidad++;
-		}
-		break;
-	case 'A':
-		if (velocidad > 0)
-		{
-			velocidad--;
-		}
-		break;
-	case 'O':
-		if (velocidad2 < 10)
-		{
-			velocidad2++;
-		}
-		break;
-	case 'L':
-		if (velocidad2 > 0)
-		{
-			velocidad2--;
-		}
-		break;
-	case VK_F1:
-		seleccion = 3;
-		camera->SetTurnStep(90);
-		camera->SetPosition(-70, 900, 130);
-		camera->SetTurnStep(0.1f);
-		break;
-	case VK_F2:
-		seleccion = 1;
-		break;
-	case VK_F3:
-		seleccion = 2;
-		break;
-	case 'C':
-		velocidad = 5;
-		break;
-	}*/
 
-	
 	
 	switch (virtualKey){
 		// MOVIMIENTO IZQ-DCHA- ARRIBA-ABAJO
