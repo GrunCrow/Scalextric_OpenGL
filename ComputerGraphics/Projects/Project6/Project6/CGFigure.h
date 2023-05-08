@@ -17,7 +17,11 @@ class CGFigure {
 protected:
 	glm::mat4 model; // Model matrix
 
+private:
+	glm::vec3 m_direction;
+
 public:
+	CGFigure();
 	void ResetLocation();
 	void Translate(glm::vec3 t);
 	void Rotate(GLfloat angle, glm::vec3 axis);
@@ -32,6 +36,8 @@ public:
 	void Draw(CGShaderProgram* program, glm::mat4 projection, glm::mat4 view);
 	virtual int GetNumPieces() = 0;
 	virtual CGPiece* GetPiece(int i) = 0;
+
+	glm::vec3 GetDirection() const {return m_direction;}
 };
 
 #endif

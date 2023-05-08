@@ -34,6 +34,20 @@
 #define LongMediaRecta 17.5f
 #define LongCuartoRecta 8.75f
 
+#define CurvaInterior1 9.7f
+#define CurvaInterior2 17.5f
+#define CurvaInteriorAnguloRadianes (M_PI / 4)
+#define CurvaInteriorAnguloGrados 45
+
+#define CurvaExterior1 40.9f
+#define CurvaExterior2 48.9f
+#define CurvaExteriorAnguloRadianes (M_PI / 8)
+#define CurvaExteriorAnguloGrados 22.5f
+
+#define CurvaEstandar1 25.3f
+#define CurvaEstandar2 33.1f
+#define CurvaEstandarAnguloRadianes (M_PI/4)
+#define CurvaEstandarAnguloGrados 45
 
 void printError(char* msg)
 {
@@ -180,6 +194,7 @@ void CGModel::Update()
 	Dist_Recorrida1 = (velocidad * 0.02);
 	Dist_Recorrida2 = (velocidad2 * 0.02);
 
+	// si es recta
 	if (Pistas[Indice_1][0] == 3 || Pistas[Indice_1][0] == 2 || Pistas[Indice_1][0] == 1)
 	{
 
@@ -189,13 +204,11 @@ void CGModel::Update()
 			GLdouble dx = 0, dz = 0;
 			Dist_CocheX1 = Dist_CocheX1 + Dist_Recorrida1;
 
-			if (Dist_CocheX1 <= LongRecta)
-			{
+			if (Dist_CocheX1 <= LongRecta){
 				Coche1->Translate(glm::vec3(0, -Dist_Recorrida1, 0));
 				posBeg -= glm::vec3(0, -Dist_Recorrida1, 0);
 			}
-			else
-			{
+			else{
 				Dist_Recorrida1 = 0;
 				Indice_1++;
 				Dist_CocheX1 = 0;
@@ -203,30 +216,25 @@ void CGModel::Update()
 				posBeg -= glm::vec3(0, -Dist_Recorrida1, 0);
 			}
 		}
-		if (Pistas[Indice_1][0] == 2)
-		{
+		if (Pistas[Indice_1][0] == 2){
 			if (velocidad < 7 && velocidad != 0) velocidad++;
 			Dist_CocheX1 = Dist_CocheX1 + Dist_Recorrida1;
 
-			if (Dist_CocheX1 <= LongMediaRecta)
-			{
+			if (Dist_CocheX1 <= LongMediaRecta){
 				Coche1->Translate(glm::vec3(0, -Dist_Recorrida1, 0));
 			}
-			else
-			{
+			else{
 				Dist_Recorrida1 = 0;
 				Indice_1++;
 				Dist_CocheX1 = 0;
 				Coche1->Translate(glm::vec3(0, -Dist_Recorrida1, 0));
 			}
 		}
-		if (Pistas[Indice_1][0] == 3)
-		{
+		if (Pistas[Indice_1][0] == 3){
 			if (velocidad < 7 && velocidad != 0) velocidad++;
 			Dist_CocheX1 = Dist_CocheX1 + Dist_Recorrida1;
 
-			if (Dist_CocheX1 <= LongCuartoRecta)
-			{
+			if (Dist_CocheX1 <= LongCuartoRecta){
 				Coche1->Translate(glm::vec3(0, -Dist_Recorrida1, 0));
 			}
 			else
@@ -238,26 +246,28 @@ void CGModel::Update()
 			}
 		}
 	}
+	// si es curva
 	else
 	{
 
-		if (Pistas[Indice_1][0] == 4)
+		if (Pistas[Indice_1][0] == 4) // 4. Curva interior
 		{
+			std::cout << "Curva Interior";
 			if (velocidad > 7 && velocidad != 0)
 				velocidad = velocidad - 3;
 
-			if (t == 1)
-			{
+			if (t == 1){ // 1
+				// todo revisar desplazamiento curva
 				GLdouble x = 0, z = 0, dx = 0, dz = 0;;
 				GLdouble angulo = 0;
-				Coche1->desplazamiento_curva(x, z, 9.7, M_PI / 4);
+				Coche1->desplazamiento_curva(x, z, CurvaInterior1, CurvaInteriorAnguloRadianes);
 				Dist_CocheX1 = Dist_CocheX1 + Dist_Recorrida1;
 				Dist_CocheZ1 = Dist_CocheZ1 + Dist_Recorrida1;
-				angulo = angulo + (((45) * Dist_Recorrida1) / x);
-				GLdouble ang = (angulo * (M_PI / 4)) / 45;
-				Coche1->desplazamiento_curva(dx, dz, 9.7, ang);
+				angulo = angulo + (((CurvaInteriorAnguloGrados) * Dist_Recorrida1) / x);
+				GLdouble ang = (angulo * CurvaInteriorAnguloRadianes) / CurvaInteriorAnguloGrados;
+				Coche1->desplazamiento_curva(dx, dz, CurvaInterior1, ang);
 
-				if (Dist_CocheX1 <= x && angulo <= 45)
+				if (Dist_CocheX1 <= x && angulo <= CurvaInteriorAnguloGrados)
 				{
 					Coche1->Translate(glm::vec3(dz, -dx, 0));
 					Coche1->Rotate(-angulo, glm::vec3(0.0f, 0.0f, 1.0f));
@@ -271,74 +281,18 @@ void CGModel::Update()
 					Dist_CocheZ1 = 0;
 				}
 			}
-			else
+			else // 2
 			{
 				GLdouble x = 0, z = 0, dx = 0, dz = 0;;
 				GLdouble angulo = 0;
-				Coche1->desplazamiento_curva(x, z, 17.5, M_PI / 4);
+				Coche1->desplazamiento_curva(x, z, CurvaInterior2, CurvaInteriorAnguloRadianes);
 				Dist_CocheX1 = Dist_CocheX1 + Dist_Recorrida1;
 				Dist_CocheZ1 = Dist_CocheZ1 + Dist_Recorrida1;
-				angulo = angulo + (((45) * Dist_Recorrida1) / x);
-				GLdouble ang = (angulo * (M_PI / 4)) / 45;
-				Coche1->desplazamiento_curva(dx, dz, 17.5, ang);
+				angulo = angulo + ((CurvaInteriorAnguloGrados * Dist_Recorrida1) / x);
+				GLdouble ang = (angulo * CurvaInteriorAnguloRadianes / CurvaInteriorAnguloGrados);
+				Coche1->desplazamiento_curva(dx, dz, CurvaInterior2, ang);
 
-				if (Dist_CocheX1 <= x && angulo <= 45)
-				{
-					Coche1->Translate(glm::vec3(dz, -dx, 0));
-					Coche1->Rotate(angulo, glm::vec3(0.0f, 0.0f, 1.0f));
-				}
-				else
-				{
-					Dist_Recorrida1 = 0;
-					Indice_1++;
-					Coche1->Rotate(angulo, glm::vec3(0.0f, 0.0f, 1.0f));
-					Dist_CocheX1 = 0;
-					Dist_CocheZ1 = 0;
-				}
-			}
-		}
-		if (Pistas[Indice_1][0] == 6)
-		{
-			if (velocidad > 7 && velocidad != 0) velocidad - 3;
-
-			if (t == 1)
-			{
-				GLdouble x = 0, z = 0, dx = 0, dz = 0;;
-				GLdouble angulo = 0;
-				Coche1->desplazamiento_curva(x, z, 25.3, M_PI / 4);
-				Dist_CocheX1 = Dist_CocheX1 + Dist_Recorrida1;
-				Dist_CocheZ1 = Dist_CocheZ1 + Dist_Recorrida1;
-				angulo = angulo + (((45) * Dist_Recorrida1) / x);
-				GLdouble ang = (angulo * (M_PI / 4)) / 45;
-				Coche1->desplazamiento_curva(dx, dz, 25.3, ang);
-
-				if (Dist_CocheX1 <= x && angulo <= 45)
-				{
-					Coche1->Translate(glm::vec3(dz, -dx, 0));
-					Coche1->Rotate(-angulo, glm::vec3(0.0f, 0.0f, 1.0f));
-				}
-				else
-				{
-					Dist_Recorrida1 = 0;
-					Indice_1++;
-					Coche1->Rotate(-angulo, glm::vec3(0.0f, 0.0f, 1.0f));
-					Dist_CocheX1 = 0;
-					Dist_CocheZ1 = 0;
-				}
-			}
-			else
-			{
-
-				GLdouble x = 0, z = 0, dx = 0, dz = 0;;
-				GLdouble angulo = 0;
-				Coche1->desplazamiento_curva(x, z, 33.1, M_PI / 4);
-				Dist_CocheX1 = Dist_CocheX1 + Dist_Recorrida1;
-				Dist_CocheZ1 = Dist_CocheZ1 + Dist_Recorrida1;
-				angulo = angulo + (((45) * Dist_Recorrida1) / x);
-				GLdouble ang = (angulo * (M_PI / 4)) / 45;
-				Coche1->desplazamiento_curva(dx, dz, 33.1, ang);
-
-				if (Dist_CocheX1 <= x && angulo <= 45)
+				if (Dist_CocheX1 <= x && angulo <= CurvaInteriorAnguloGrados)
 				{
 					Coche1->Translate(glm::vec3(dz, -dx, 0));
 					Coche1->Rotate(angulo, glm::vec3(0.0f, 0.0f, 1.0f));
@@ -353,22 +307,80 @@ void CGModel::Update()
 				}
 			}
 		}
-		if (Pistas[Indice_1][0] == 5)
+		if (Pistas[Indice_1][0] == 6) // curva estandar
 		{
+			std::cout << "Curva Estandar";
 			if (velocidad > 7 && velocidad != 0) velocidad - 3;
 
 			if (t == 1)
 			{
 				GLdouble x = 0, z = 0, dx = 0, dz = 0;;
 				GLdouble angulo = 0;
-				Coche1->desplazamiento_curva(x, z, 40.9, M_PI / 8);
+				Coche1->desplazamiento_curva(x, z, CurvaEstandar1, CurvaEstandarAnguloRadianes);
 				Dist_CocheX1 = Dist_CocheX1 + Dist_Recorrida1;
 				Dist_CocheZ1 = Dist_CocheZ1 + Dist_Recorrida1;
-				angulo = angulo + (((22.5) * Dist_Recorrida1) / x);
-				GLdouble ang = (angulo * (M_PI / 8)) / 22.5;
-				Coche1->desplazamiento_curva(dx, dz, 40.9, ang);
+				angulo = angulo + ((CurvaEstandarAnguloGrados * Dist_Recorrida1) / x);
+				GLdouble ang = (angulo * CurvaEstandarAnguloRadianes) / CurvaEstandarAnguloGrados;
+				Coche1->desplazamiento_curva(dx, dz, CurvaEstandar1, ang);
 
-				if (Dist_CocheX1 <= x && angulo <= 22.5)
+				if (Dist_CocheX1 <= x && angulo <= CurvaEstandarAnguloGrados)
+				{
+					Coche1->Translate(glm::vec3(dz, -dx, 0));
+					Coche1->Rotate(-angulo, glm::vec3(0.0f, 0.0f, 1.0f));
+				}
+				else
+				{
+					Dist_Recorrida1 = 0;
+					Indice_1++;
+					Coche1->Rotate(-angulo, glm::vec3(0.0f, 0.0f, 1.0f));
+					Dist_CocheX1 = 0;
+					Dist_CocheZ1 = 0;
+				}
+			}
+			else // t==2
+			{
+
+				GLdouble x = 0, z = 0, dx = 0, dz = 0;;
+				GLdouble angulo = 0;
+				Coche1->desplazamiento_curva(x, z, CurvaEstandar2, CurvaEstandarAnguloRadianes);
+				Dist_CocheX1 = Dist_CocheX1 + Dist_Recorrida1;
+				Dist_CocheZ1 = Dist_CocheZ1 + Dist_Recorrida1;
+				angulo = angulo + ((CurvaEstandarAnguloGrados * Dist_Recorrida1) / x);
+				GLdouble ang = (angulo * CurvaEstandarAnguloRadianes) / CurvaEstandarAnguloGrados;
+				Coche1->desplazamiento_curva(dx, dz, CurvaEstandar2, ang);
+
+				if (Dist_CocheX1 <= x && angulo <= CurvaEstandarAnguloGrados)
+				{
+					Coche1->Translate(glm::vec3(dz, -dx, 0));
+					Coche1->Rotate(angulo, glm::vec3(0.0f, 0.0f, 1.0f));
+				}
+				else
+				{
+					Dist_Recorrida1 = 0;
+					Indice_1++;
+					Coche1->Rotate(angulo, glm::vec3(0.0f, 0.0f, 1.0f));
+					Dist_CocheX1 = 0;
+					Dist_CocheZ1 = 0;
+				}
+			}
+		}
+		if (Pistas[Indice_1][0] == 5) // curva exterior
+		{
+			std::cout << "Curva Exterior";
+			if (velocidad > 7 && velocidad != 0) velocidad - 3;
+
+			if (t == 1)
+			{
+				GLdouble x = 0, z = 0, dx = 0, dz = 0;;
+				GLdouble angulo = 0;
+				Coche1->desplazamiento_curva(x, z, CurvaExterior1, CurvaExteriorAnguloRadianes);
+				Dist_CocheX1 = Dist_CocheX1 + Dist_Recorrida1;
+				Dist_CocheZ1 = Dist_CocheZ1 + Dist_Recorrida1;
+				angulo = angulo + ((CurvaExteriorAnguloGrados * Dist_Recorrida1) / x);
+				GLdouble ang = (angulo * CurvaExteriorAnguloRadianes) / CurvaExteriorAnguloGrados;
+				Coche1->desplazamiento_curva(dx, dz, CurvaExterior1, ang);
+
+				if (Dist_CocheX1 <= x && angulo <= CurvaExteriorAnguloGrados)
 				{
 					Coche1->Translate(glm::vec3(dz, -dx, 0));
 					Coche1->Rotate(-angulo, glm::vec3(0.0f, 0.0f, 1.0f));
@@ -387,14 +399,14 @@ void CGModel::Update()
 
 				GLdouble x = 0, z = 0, dx = 0, dz = 0;;
 				GLdouble angulo = 0;
-				Coche1->desplazamiento_curva(x, z, 48.9, M_PI / 8);
+				Coche1->desplazamiento_curva(x, z, CurvaExterior2, CurvaExteriorAnguloRadianes);
 				Dist_CocheX1 = Dist_CocheX1 + Dist_Recorrida1;
-				angulo = angulo + (((22.5) * Dist_Recorrida1) / x);
-				GLdouble ang = (angulo * (M_PI / 8)) / 22.5;
-				Coche1->desplazamiento_curva(dx, dz, 48.9, ang);
+				angulo = angulo + ((CurvaExteriorAnguloGrados * Dist_Recorrida1) / x);
+				GLdouble ang = (angulo * CurvaExteriorAnguloRadianes) / CurvaExteriorAnguloGrados;
+				Coche1->desplazamiento_curva(dx, dz, CurvaExterior2, ang);
 				Dist_CocheZ1 = Dist_CocheZ1 + dz;
 
-				if (Dist_CocheX1 <= x && angulo <= 22.5 && Dist_CocheZ1 <= z)
+				if (Dist_CocheX1 <= x && angulo <= CurvaExteriorAnguloGrados && Dist_CocheZ1 <= z)
 				{
 					Coche1->Rotate(angulo, glm::vec3(0.0f, 0.0f, 1.0f));
 					Coche1->Translate(glm::vec3(dz, -dx, 0));
@@ -411,6 +423,8 @@ void CGModel::Update()
 		}
 	}
 
+	// coche 2
+	// si es una recta
 	if (Pistas[Indice_2][0] == 1 || Pistas[Indice_2][0] == 2 || Pistas[Indice_2][0] == 3)
 	{
 		if (Pistas[Indice_2][0] == 1)
@@ -466,10 +480,12 @@ void CGModel::Update()
 			}
 		}
 	}
+
+	// curva
 	else
 	{
 
-		if (Pistas[Indice_2][0] == 4)
+		if (Pistas[Indice_2][0] == 4) // curva interior
 		{
 			if (velocidad2 > 7 && velocidad2 != 0) velocidad2 - 3;
 
@@ -477,12 +493,12 @@ void CGModel::Update()
 			{
 				GLdouble x = 0, z = 0, dx = 0, dz = 0;;
 				GLdouble angulo = 0;
-				Coche2->desplazamiento_curva(x, z, 9.7, M_PI / 4);
+				Coche2->desplazamiento_curva(x, z, CurvaInterior1, CurvaInteriorAnguloRadianes);
 				Dist_CocheX2 = Dist_CocheX2 + Dist_Recorrida2;
 				Dist_CocheZ2 = Dist_CocheZ2 + Dist_Recorrida2;
 				angulo = angulo + (((45) * Dist_Recorrida2) / x);
-				GLdouble ang = (angulo * (M_PI / 4)) / 45;
-				Coche2->desplazamiento_curva(dx, dz, 9.7, ang);
+				GLdouble ang = (angulo * CurvaInteriorAnguloRadianes) / 45;
+				Coche2->desplazamiento_curva(dx, dz, CurvaInterior1, ang);
 
 				if (Dist_CocheX2 <= x && angulo <= 45)
 				{
@@ -502,12 +518,12 @@ void CGModel::Update()
 			{
 				GLdouble x = 0, z = 0, dx = 0, dz = 0;;
 				GLdouble angulo = 0;
-				Coche2->desplazamiento_curva(x, z, 17.5, M_PI / 4);
+				Coche2->desplazamiento_curva(x, z, CurvaInterior2, CurvaInteriorAnguloRadianes);
 				Dist_CocheX2 = Dist_CocheX2 + Dist_Recorrida2;
 				Dist_CocheZ2 = Dist_CocheZ2 + Dist_Recorrida2;
 				angulo = angulo + (((45) * Dist_Recorrida2) / x);
-				GLdouble ang = (angulo * (M_PI / 4)) / 45;
-				Coche2->desplazamiento_curva(dx, dz, 17.5, ang);
+				GLdouble ang = (angulo * CurvaInteriorAnguloRadianes) / 45;
+				Coche2->desplazamiento_curva(dx, dz, CurvaInterior2, ang);
 
 				if (Dist_CocheX2 <= x && angulo <= 45)
 				{
@@ -524,7 +540,7 @@ void CGModel::Update()
 				}
 			}
 		}
-		if (Pistas[Indice_2][0] == 6)
+		if (Pistas[Indice_2][0] == 6) // curva estandar
 		{
 			if (velocidad2 > 7 && velocidad2 != 0)velocidad2 - 3;
 
@@ -532,14 +548,14 @@ void CGModel::Update()
 			{
 				GLdouble x = 0, z = 0, dx = 0, dz = 0;;
 				GLdouble angulo = 0;
-				Coche2->desplazamiento_curva(x, z, 25.3, M_PI / 4);
+				Coche2->desplazamiento_curva(x, z, CurvaEstandar1, CurvaEstandarAnguloRadianes);
 				Dist_CocheX2 = Dist_CocheX2 + Dist_Recorrida2;
 				Dist_CocheZ2 = Dist_CocheZ2 + Dist_Recorrida2;
-				angulo = angulo + (((45) * Dist_Recorrida2) / x);
-				GLdouble ang = (angulo * (M_PI / 4)) / 45;
-				Coche2->desplazamiento_curva(dx, dz, 25.3, ang);
+				angulo = angulo + ((CurvaEstandarAnguloGrados * Dist_Recorrida2) / x);
+				GLdouble ang = (angulo * (CurvaEstandarAnguloRadianes)) / CurvaEstandarAnguloGrados;
+				Coche2->desplazamiento_curva(dx, dz, CurvaEstandar1, ang);
 
-				if (Dist_CocheX2 <= x && angulo <= 45)
+				if (Dist_CocheX2 <= x && angulo <= CurvaEstandarAnguloGrados)
 				{
 					Coche2->Translate(glm::vec3(dz, -dx, 0));
 					Coche2->Rotate(angulo, glm::vec3(0.0f, 0.0f, 1.0f));
@@ -557,14 +573,14 @@ void CGModel::Update()
 			{
 				GLdouble x = 0, z = 0, dx = 0, dz = 0;;
 				GLdouble angulo = 0;
-				Coche2->desplazamiento_curva(x, z, 33.1, M_PI / 4);
+				Coche2->desplazamiento_curva(x, z, CurvaEstandar2, CurvaEstandarAnguloRadianes);
 				Dist_CocheX2 = Dist_CocheX2 + Dist_Recorrida2;
 				Dist_CocheZ2 = Dist_CocheZ2 + Dist_Recorrida2;
-				angulo = angulo + (((45) * Dist_Recorrida2) / x);
-				GLdouble ang = (angulo * (M_PI / 4)) / 45;
-				Coche2->desplazamiento_curva(dx, dz, 33.1, ang);
+				angulo = angulo + ((CurvaEstandarAnguloGrados * Dist_Recorrida2) / x);
+				GLdouble ang = (angulo * (CurvaInteriorAnguloRadianes)) / CurvaEstandarAnguloGrados;
+				Coche2->desplazamiento_curva(dx, dz, CurvaEstandar2, ang);
 
-				if (Dist_CocheX2 <= x && angulo <= 45)
+				if (Dist_CocheX2 <= x && angulo <= CurvaEstandarAnguloGrados)
 				{
 					Coche2->Translate(glm::vec3(dz, -dx, 0));
 					Coche2->Rotate(-angulo, glm::vec3(0.0f, 0.0f, 1.0f));
@@ -579,21 +595,21 @@ void CGModel::Update()
 				}
 			}
 		}
-		if (Pistas[Indice_2][0] == 5)
+		if (Pistas[Indice_2][0] == 5) // curva exterior
 		{
 			if (velocidad2 > 7 && velocidad2 != 0) velocidad2 - 3;
 			if (tt == 2)
 			{
 				GLdouble x = 0, z = 0, dx = 0, dz = 0;;
 				GLdouble angulo = 0;
-				Coche2->desplazamiento_curva(x, z, 40.9, M_PI / 8);
+				Coche2->desplazamiento_curva(x, z, CurvaExterior1, CurvaExteriorAnguloRadianes);
 				Dist_CocheX2 = Dist_CocheX2 + Dist_Recorrida2;
 				Dist_CocheZ2 = Dist_CocheZ2 + Dist_Recorrida2;
-				angulo = angulo + (((22.5) * Dist_Recorrida2) / x);
-				GLdouble ang = (angulo * (M_PI / 8)) / 22.5;
-				Coche2->desplazamiento_curva(dx, dz, 40.9, ang);
+				angulo = angulo + (((CurvaExteriorAnguloGrados) * Dist_Recorrida2) / x);
+				GLdouble ang = (angulo * (CurvaExteriorAnguloRadianes)) / CurvaExteriorAnguloGrados;
+				Coche2->desplazamiento_curva(dx, dz, CurvaExterior1, ang);
 
-				if (Dist_CocheX2 <= x && angulo <= 22.5)
+				if (Dist_CocheX2 <= x && angulo <= CurvaExteriorAnguloGrados)
 				{
 					Coche2->Translate(glm::vec3(dz, -dx, 0));
 					Coche2->Rotate(angulo, glm::vec3(0.0f, 0.0f, 1.0f));
@@ -611,14 +627,14 @@ void CGModel::Update()
 			{
 				GLdouble x = 0, z = 0, dx = 0, dz = 0;;
 				GLdouble angulo = 0;
-				Coche2->desplazamiento_curva(x, z, 48.9, M_PI / 8);
+				Coche2->desplazamiento_curva(x, z, CurvaExterior2, CurvaExteriorAnguloRadianes);
 				Dist_CocheX2 = Dist_CocheX2 + Dist_Recorrida2;
-				angulo = angulo + (((22.5) * Dist_Recorrida2) / x);
-				GLdouble ang = (angulo * (M_PI / 8)) / 22.5;
-				Coche2->desplazamiento_curva(dx, dz, 48.9, ang);
+				angulo = angulo + (((CurvaExteriorAnguloGrados) * Dist_Recorrida2) / x);
+				GLdouble ang = (angulo * (CurvaExteriorAnguloRadianes)) / CurvaExteriorAnguloGrados;
+				Coche2->desplazamiento_curva(dx, dz, CurvaExterior2, ang);
 				Dist_CocheZ2 = Dist_CocheZ2 + dz;
 
-				if (Dist_CocheX2 <= x && angulo <= 22.5 && Dist_CocheZ2 <= z)
+				if (Dist_CocheX2 <= x && angulo <= CurvaExteriorAnguloGrados && Dist_CocheZ2 <= z)
 				{
 					Coche2->Rotate(-angulo, glm::vec3(0.0f, 0.0f, 1.0f));
 					Coche2->Translate(glm::vec3(dz, -dx, 0));
@@ -635,17 +651,29 @@ void CGModel::Update()
 		}
 	}
 	if (seleccion == 1){
+		// Obtener la matriz de transformación del coche
 		loc = Coche1->GetLocation();
-		//loc = glm::translate(loc, glm::vec3(0, 2, -5));
-		//view = glm::inverse(loc);
-		//camera->SetPosition(view[0], view[1], view[2]);
-		camera->SetPosition(loc[3][0] - 4.0f, loc[3][1] + 2.0f, loc[3][2]);
+		/*glm::mat4 car_location = Coche1->GetLocation();
+
+		// Crear una matriz de transformación que desplace la cámara hacia arriba y hacia atrás
+		//glm::mat4 cameraTranslation = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 2.0f, -5.0f));
+		glm::mat4 cameraTranslation = glm::translate(car_location, glm::vec3(0.0f, 2.0f, -5.0f));
+		
+		// Combinar la matriz de transformación de la cámara con la matriz de vista inversa del coche
+		//glm::mat4 view = glm::inverse(cameraTranslation * car_location);
+		glm::mat4 view = glm::inverse(cameraTranslation);
+
+		// Actualizar la posición y dirección de la cámara con la nueva matriz de vista
+		camera->SetPosition(view[3][0], view[3][1], view[3][2]);
+		camera->SetDirection(view[1][0], view[1][1], view[1][2], view[2][0], view[2][1], view[2][2]);*/
+		camera->SetPosition(loc[3][0] + 0.0f, loc[3][1] + 3.0f, loc[3][2] + 0.0f);
 		camera->SetDirection(loc[1][0], loc[1][1], loc[1][2], loc[2][0], loc[2][1], loc[2][2]);
+
 		// get location del coche y modificar en y y z -> getloca del coche, transl a lo que se quiera modif y luego la inversa
 	}
 	if (seleccion == 2){
 		loc = Coche2->GetLocation();
-		camera->SetPosition(loc[3][0] - 5.0f, loc[3][1] + 2.0f, loc[3][2]);
+		camera->SetPosition(loc[3][0] + 2.0f, loc[3][1] + 3.0f, loc[3][2] - 0.0f);
 		camera->SetDirection(loc[1][0], loc[1][1], loc[1][2], loc[2][0], loc[2][1], loc[2][2]);
 	}
 }

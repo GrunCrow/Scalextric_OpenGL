@@ -6,6 +6,12 @@
 #include "CGFigure.h"
 
 
+CGFigure::CGFigure()
+{
+	// ...
+	m_direction = glm::vec3(0.0f, 0.0f, 1.0f); // Inicializa la dirección hacia adelante en el eje Z
+}
+
 void CGFigure::ResetLocation()
 {
 	model = glm::mat4(1.0f);
@@ -28,6 +34,7 @@ void CGFigure::Translate(glm::vec3 t)
 void CGFigure::Rotate(GLfloat angle, glm::vec3 axis)
 {
 	model = glm::rotate(model, glm::radians(angle), axis);
+	m_direction = glm::mat3(model) * glm::vec3(0.0f, 0.0f, 1.0f);
 }
 
 void CGFigure::Draw(CGShaderProgram* program, glm::mat4 projection, glm::mat4 view)
