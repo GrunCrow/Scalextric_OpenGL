@@ -21,7 +21,20 @@
 #define LongCuartoRecta 8.75f
 #define RM_CURVA_INT 13.6
 
+#define CurvaInterior1 9.7f
+#define CurvaInterior2 17.5f
+#define CurvaInteriorAnguloRadianes (M_PI / 4)
+#define CurvaInteriorAnguloGrados 45
 
+#define CurvaExterior1 40.9f
+#define CurvaExterior2 48.9f
+#define CurvaExteriorAnguloRadianes (M_PI / 8)
+#define CurvaExteriorAnguloGrados 22.5f
+
+#define CurvaEstandar1 25.3f
+#define CurvaEstandar2 33.1f
+#define CurvaEstandarAnguloRadianes (M_PI/4)
+#define CurvaEstandarAnguloGrados 45
 
 //
 // FUNCIÓN: CGScene::CGScene()
