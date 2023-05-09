@@ -41,8 +41,8 @@
 
 #define CurvaExterior1 44.0f //40.9f
 #define CurvaExterior2 48.5f // 48.9f
-#define CurvaExterior1Coche2 38.0f //40.9f
-#define CurvaExterior2Coche2 58.0f // 48.9f
+#define CurvaExterior1Coche2 48.9f //38.0f //40.9f // opt 62.5f
+#define CurvaExterior2Coche2 40.9f //58.0f // 48.9f
 #define CurvaExteriorAnguloRadianes (M_PI / 8)
 #define CurvaExteriorAnguloGrados 22.5f
 
@@ -609,12 +609,12 @@ void CGModel::Update()
 				std::cout << "2\n";
 				GLdouble x = 0, z = 0, dx = 0, dz = 0;;
 				GLdouble angulo = 0;
-				Coche2->desplazamiento_curva(x, z, CurvaExterior1Coche2, CurvaExteriorAnguloRadianes);
+				Coche2->desplazamiento_curva(x, z, CurvaExterior2Coche2, CurvaExteriorAnguloRadianes);
 				Dist_CocheX2 = Dist_CocheX2 + Dist_Recorrida2;
 				Dist_CocheZ2 = Dist_CocheZ2 + Dist_Recorrida2;
 				angulo = angulo + (((CurvaExteriorAnguloGrados) * Dist_Recorrida2) / x);
 				GLdouble ang = (angulo * (CurvaExteriorAnguloRadianes)) / CurvaExteriorAnguloGrados;
-				Coche2->desplazamiento_curva(dx, dz, CurvaExterior1Coche2, ang);
+				Coche2->desplazamiento_curva(dx, dz, CurvaExterior2Coche2, ang);
 
 				if (Dist_CocheX2 <= x && angulo <= CurvaExteriorAnguloGrados)
 				{
@@ -635,11 +635,11 @@ void CGModel::Update()
 				std::cout << "1\n";
 				GLdouble x = 0, z = 0, dx = 0, dz = 0;;
 				GLdouble angulo = 0;
-				Coche2->desplazamiento_curva(x, z, CurvaExterior2Coche2, CurvaExteriorAnguloRadianes);
+				Coche2->desplazamiento_curva(x, z, CurvaExterior1Coche2, CurvaExteriorAnguloRadianes);
 				Dist_CocheX2 = Dist_CocheX2 + Dist_Recorrida2;
 				angulo = angulo + ((CurvaExteriorAnguloGrados * Dist_Recorrida2) / x);
 				GLdouble ang = (angulo * (CurvaExteriorAnguloRadianes)) / CurvaExteriorAnguloGrados;
-				Coche2->desplazamiento_curva(dx, dz, CurvaExterior2Coche2, ang);
+				Coche2->desplazamiento_curva(dx, dz, CurvaExterior1Coche2, ang);
 				Dist_CocheZ2 = Dist_CocheZ2 + dz;
 
 				if (Dist_CocheX2 <= x && angulo <= CurvaExteriorAnguloGrados && Dist_CocheZ2 <= z)
