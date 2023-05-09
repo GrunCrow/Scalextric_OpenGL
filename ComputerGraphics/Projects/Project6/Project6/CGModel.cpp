@@ -674,14 +674,14 @@ void CGModel::Update()
 		// Actualizar la posición y dirección de la cámara con la nueva matriz de vista
 		camera->SetPosition(view[3][0], view[3][1], view[3][2]);
 		camera->SetDirection(view[1][0], view[1][1], view[1][2], view[2][0], view[2][1], view[2][2]);*/
-		camera->SetPosition(loc[3][0] + 0.0f, loc[3][1] + 3.0f, loc[3][2] + 0.0f);
+		camera->SetPosition(loc[3][0] - 0.0f, loc[3][1] + 2.0f, loc[3][2] - 0.0f);
 		camera->SetDirection(loc[1][0], loc[1][1], loc[1][2], loc[2][0], loc[2][1], loc[2][2]);
 
 		// get location del coche y modificar en y y z -> getloca del coche, transl a lo que se quiera modif y luego la inversa
 	}
 	if (seleccion == 2){
 		loc = Coche2->GetLocation();
-		camera->SetPosition(loc[3][0] + 2.0f, loc[3][1] + 3.0f, loc[3][2] - 0.0f);
+		camera->SetPosition(loc[3][0] - 0.0f, loc[3][1] + 2.0f, loc[3][2] - 0.0f);
 		camera->SetDirection(loc[1][0], loc[1][1], loc[1][2], loc[2][0], loc[2][1], loc[2][2]);
 	}
 }

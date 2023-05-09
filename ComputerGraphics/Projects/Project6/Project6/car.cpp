@@ -11,49 +11,56 @@ car::car()
 	mtl0->SetDifusseReflect(1.0f, 1.0f, 1.0f);
 	mtl0->SetSpecularReflect(0.0f, 0.0f, 0.0f);
 	mtl0->SetShininess(2.0f);
-	mtl0->InitTexture("textures/Car/Tororosso/tr0_main.tga");
+	mtl0->InitTexture("textures/Car/Renault/re0_main.tga");
+	//mtl0->InitTexture("textures/Car/Tororosso/tr0_main.tga");
 
 	CGMaterial* mtl1 = new CGMaterial();
 	mtl1->SetAmbientReflect(0.0f, 0.0f, 0.0f);
 	mtl1->SetDifusseReflect(1.0f, 1.0f, 1.0f);
 	mtl1->SetSpecularReflect(0.0f, 0.0f, 0.0f);
 	mtl1->SetShininess(2.0f);
-	mtl1->InitTexture("textures/Car/Tororosso/generic_main.tga");
+	mtl1->InitTexture("textures/Car/Renault/generic_main.tga");
+	//mtl1->InitTexture("textures/Car/Tororosso/generic_main.tga");
 
 	CGMaterial* mtl2 = new CGMaterial();
 	mtl2->SetAmbientReflect(0.0f, 0.0f, 0.0f);
 	mtl2->SetDifusseReflect(1.0f, 1.0f, 1.0f);
 	mtl2->SetSpecularReflect(0.0f, 0.0f, 0.0f);
 	mtl2->SetShininess(2.0f);
-	mtl2->InitTexture("textures/Car/Tororosso/tr0_wheel.tga");
+	mtl2->InitTexture("textures/Car/Renault/re0_wheel.tga");
+	//mtl2->InitTexture("textures/Car/Tororosso/tr0_wheel.tga");
 
 	CGMaterial* mtl3 = new CGMaterial();
 	mtl3->SetAmbientReflect(0.0f, 0.0f, 0.0f);
 	mtl3->SetDifusseReflect(1.0f, 1.0f, 1.0f);
 	mtl3->SetSpecularReflect(0.0f, 0.0f, 0.0f);
 	mtl3->SetShininess(2.0f);
-	mtl3->InitTexture("textures/Car/Tororosso/light_glow.tga");
+	mtl3->InitTexture("textures/Car/Renault/light_glow.tga");
+	//mtl3->InitTexture("textures/Car/Tororosso/light_glow.tga");
 
 	CGMaterial* mtl4 = new CGMaterial();
 	mtl4->SetAmbientReflect(0.0f, 0.0f, 0.0f);
 	mtl4->SetDifusseReflect(1.0f, 1.0f, 1.0f);
 	mtl4->SetSpecularReflect(0.0f, 0.0f, 0.0f);
 	mtl4->SetShininess(2.0f);
-	mtl4->InitTexture("textures/Car/Tororosso/tyre.tga");
+	mtl4->InitTexture("textures/Car/Renault/tyre.tga");
+	//mtl4->InitTexture("textures/Car/Tororosso/tyre.tga");
 
 	CGMaterial* mtl5 = new CGMaterial();
 	mtl5->SetAmbientReflect(0.0f, 0.0f, 0.0f);
 	mtl5->SetDifusseReflect(1.0f, 1.0f, 1.0f);
 	mtl5->SetSpecularReflect(0.0f, 0.0f, 0.0f);
 	mtl5->SetShininess(2.0f);
-	mtl5->InitTexture("textures/Car/Tororosso/tread_slick.tga");
+	mtl5->InitTexture("textures/Car/Renault/tread_slick.tga");
+	//mtl5->InitTexture("textures/Car/Tororosso/tread_slick.tga");
 
 	CGMaterial* mtl6 = new CGMaterial();
 	mtl6->SetAmbientReflect(0.0f, 0.0f, 0.0f);
 	mtl6->SetDifusseReflect(1.0f, 1.0f, 1.0f);
 	mtl6->SetSpecularReflect(0.0f, 0.0f, 0.0f);
 	mtl6->SetShininess(2.0f);
-	mtl6->InitTexture("textures/Car/Tororosso/glass.tga");
+	mtl6->InitTexture("textures/Car/Renault/glass.tga");
+	//mtl6->InitTexture("textures/Car/Tororosso/glass.tga");
 
 	pieces[0] = new car_0(mtl0);
 	pieces[1] = new car_1(mtl1);
