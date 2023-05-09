@@ -257,32 +257,52 @@ CGScene::~CGScene()
 //
 // PROPÓSITO: Dibuja la escena
 //
-void CGScene::Draw(CGShaderProgram* program, glm::mat4 proj, glm::mat4 view)
+void CGScene::Draw(CGShaderProgram* program, glm::mat4 proj, glm::mat4 view, glm::mat4 shadowViewMatrix)
 {
 	light->SetUniforms(program);
-	skybox->Draw(program, proj, view);
-	ground->Draw(program, proj, view);
+
+	skybox->Draw(program, proj, view, shadowViewMatrix);
+
+	ground->Draw(program, proj, view, shadowViewMatrix);
+
 	for (int i = 0; i < 31; i++)
 	{
-		recta[i]->Draw(program, proj, view);
+		recta[i]->Draw(program, proj, view, shadowViewMatrix);
 	}
 
 	for (int i = 0; i < 8; i++)
 	{
-		curvaInterior[i]->Draw(program, proj, view);
+		curvaInterior[i]->Draw(program, proj, view, shadowViewMatrix);
 	}
 	for (int i = 0; i < 17; i++)
 	{
-		curvaStd[i]->Draw(program, proj, view);
+		curvaStd[i]->Draw(program, proj, view, shadowViewMatrix);
 	}
 	for (int i = 0; i < 14; i++)
 	{
-		curvaExterior[i]->Draw(program, proj, view);
+		curvaExterior[i]->Draw(program, proj, view, shadowViewMatrix);
 	}
 	for (int i = 0; i < 3; i++)
 	{
-		mediaRecta[i]->Draw(program, proj, view);
+		mediaRecta[i]->Draw(program, proj, view, shadowViewMatrix);
 	}
-	cuartoRecta->Draw(program, proj, view);
+	cuartoRecta->Draw(program, proj, view, shadowViewMatrix);
 }
 
+//
+// FUNCIÓN: CGScene::GetLightViewMatrix()
+//
+// PROPÓSITO: Obtiene la matriz de posicionamiento de la luz
+//
+glm::mat4 CGScene::GetLightViewMatrix()
+{
+	glm::vec3 Zdir = -(light->GetLightDirection());
+	glm::vec3 Up = glm::vec3(0.0f, 1.0f, 0.0f);
+	glm::vec3 Xdir = glm::normalize(glm::cross(Up, Zdir));
+	glm::vec3 Ydir = glm::cross(Zdir, Xdir);
+	glm::vec3 Zpos = 150.0f * Zdir;
+	glm::vec3 Center = glm::vec3(0.0f, 0.0f, 0.0f);
+
+	glm::mat4 view = glm::lookAt(Zpos, Center, Ydir);
+	return view;
+}

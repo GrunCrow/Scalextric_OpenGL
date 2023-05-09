@@ -20,6 +20,9 @@ public:
 	void SetDifusseLight(glm::vec3 d);
 	void SetSpecularLight(glm::vec3 s);
 	void SetUniforms(CGShaderProgram* program);
+
+	//shadow map
+	glm::vec3 GetLightDirection();
 };
 
 #endif

@@ -13,8 +13,9 @@ class CGScene {
 public:
 	CGScene();
 	~CGScene();
-	void Draw(CGShaderProgram* program, glm::mat4 proj, glm::mat4 view);
+	void Draw(CGShaderProgram* program, glm::mat4 proj, glm::mat4 view, glm::mat4 shadowViewMatrix);
 	void desplazar(GLfloat& x, GLfloat& z, GLfloat& inclinacion, GLint direccion, GLfloat radio);
+	glm::mat4 GetLightViewMatrix();
 
 private:
 	CGFigure* ground;

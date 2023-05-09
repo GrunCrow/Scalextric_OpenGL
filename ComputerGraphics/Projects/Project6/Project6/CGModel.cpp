@@ -24,6 +24,7 @@
 #include "CGScene.h"
 #include "CGShaderProgram.h"
 #include "car.h"
+#include "CGApplication.h"
 
 
 #include <iostream>
@@ -176,15 +177,99 @@ void CGModel::ReSize(GLsizei w, GLsizei h)
 }
 
 
+bool CGModel::InitShadowMap()
+{
+	GLfloat border[] = { 1.0f, 1.0f, 1.0f, 1.0f };
+	GLsizei shadowMapWidth = 1024;
+	GLsizei shadowMapHeight = 1024;
+
+	glGenFramebuffers(1, &shadowFBO);
+	glBindFramebuffer(GL_FRAMEBUFFER, shadowFBO);
+
+	glGenTextures(1, &depthTexId);
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, depthTexId);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT24, shadowMapWidth,
+		shadowMapHeight, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+	glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, border);
+	glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, depthTexId, 0);
+
+	glDrawBuffer(GL_NONE);
+
+	bool result = true;
+	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+	{
+		result = false;
+	}
+
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+	return result;
+}
+
+
 void CGModel::RenderScene()
 {
+	//*********************************************************//
+  //                  Genera el ShadowMap                    //
+  //*********************************************************//
+	
+	// Asigna las matrices Viewport, View y Projection de la luz.
+	glm::mat4 lightViewMatrix = scene->GetLightViewMatrix();
+	glm::mat4 lightPerspective = glm::ortho(-150.0f, 150.0f, -150.0f, 150.0f, 0.0f, 400.0f);
+	glm::mat4 lightMVP = lightPerspective * lightViewMatrix;
+
+	// Activa el framebuffer de la sombra
+	glBindFramebuffer(GL_FRAMEBUFFER, shadowFBO);
+
+	// Limpia la información de profundidad
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	// Selecciona la subrutina recordDepth
+	program->SetFragmentShaderUniformSubroutine("recordDepth");
+
+	// Activa front-face culling
+	glCullFace(GL_FRONT);
+
+	//Asigna el viewport
+	glViewport(0, 0, 1024, 1024);
+
+	//*********************************************************//
+  //                  Dibuja la escena                       //
+  //*********************************************************//
+
+	// Activa el framebuffer de la imagen
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+	// Limpia el framebuffer
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	// Activa back-face culling
+	glCullFace(GL_BACK);
+
+	// Selecciona la subrutina shadeWithShadow
+	program->SetFragmentShaderUniformSubroutine("shadeWithShadow");
+	program->SetUniformI("ShadowMap", 0);
+
+	// Asigna el viewport
+	glViewport(0, 0, WIDTH, HEIGHT);
+
+	// Dibuja la escena
+	scene->Draw(program, lightPerspective, lightViewMatrix, lightMVP);
+
 	//Método que genera la imagen
 	glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	
+	// Dibuja la escena
 	view = camera->ViewMatrix();
-	scene->Draw(program, projection, view);
-	Coche1->Draw(program, projection, view);
-	Coche2->Draw(program, projection, view);
+	scene->Draw(program, projection, view, lightMVP);
+	Coche1->Draw(program, projection, view, lightMVP);
+	Coche2->Draw(program, projection, view, lightMVP);
 }
 
 

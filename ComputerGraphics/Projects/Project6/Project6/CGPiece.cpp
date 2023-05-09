@@ -100,13 +100,16 @@ void CGPiece::Rotate(GLfloat angle, glm::vec3 axis)
 }
 
 
-void CGPiece::Draw(CGShaderProgram * program, glm::mat4 projection, glm::mat4 view, glm::mat4 model)
+void CGPiece::Draw(CGShaderProgram * program, glm::mat4 projection, glm::mat4 view, glm::mat4 model, glm::mat4 shadowViewMatrix)
 {
 	glm::mat4 mvp = projection*view*model*location;
 	program->SetUniformMatrix4("MVP", mvp);
 	program->SetUniformMatrix4("ViewMatrix", view);
 	program->SetUniformMatrix4("ModelViewMatrix", view*model*location);
-
+	
+	// Shadow map
+	program->SetUniformMatrix4("ShadowMatrix", shadowViewMatrix * location);
+	
 	material->SetUniforms(program);
 
 	glBindVertexArray(VAO);

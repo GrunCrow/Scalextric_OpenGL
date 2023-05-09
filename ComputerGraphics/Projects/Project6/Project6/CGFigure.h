@@ -33,7 +33,7 @@ public:
 	void desplazamiento_recta(GLdouble& x, GLdouble& z, GLdouble longitudrecta);
 	void desplazamiento_curva(GLdouble& x, GLdouble& z, GLdouble radio, GLdouble angulo);
 
-	void Draw(CGShaderProgram* program, glm::mat4 projection, glm::mat4 view);
+	void Draw(CGShaderProgram* program, glm::mat4 projection, glm::mat4 view, glm::mat4 shadowViewMatrix);
 	virtual int GetNumPieces() = 0;
 	virtual CGPiece* GetPiece(int i) = 0;
 

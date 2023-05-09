@@ -127,7 +127,7 @@ void CGSkybox::InitTexture(GLuint target, const char* filename)
 	FreeImage_Unload(pImage);
 }
 
-void CGSkybox::Draw(CGShaderProgram* program, glm::mat4 projection, glm::mat4 view)
+void CGSkybox::Draw(CGShaderProgram* program, glm::mat4 projection, glm::mat4 view, glm::mat4 shadowViewMatrix)
 {
 	glm::mat3 rot3 = glm::mat3(view); // Parte rotacional de la matriz View
 	glm::mat4 rot4 = glm::mat4(rot3);
@@ -137,6 +137,7 @@ void CGSkybox::Draw(CGShaderProgram* program, glm::mat4 projection, glm::mat4 vi
 	program->SetUniformMatrix4("MVP", inv);
 	program->SetUniformMatrix4("ViewMatrix", view);
 	program->SetUniformMatrix4("ModelViewMatrix", view);
+	program->SetUniformMatrix4("ShadowMatrix", shadowViewMatrix);
 	program->SetUniformI("CubemapTex", 1);
 	program->SetUniformI("DrawSkybox", 1);
 
