@@ -28,6 +28,8 @@
 
 #define CurvaExterior1 40.9f
 #define CurvaExterior2 48.9f
+#define CurvaExterior1Coche2 48.9f //38.0f //40.9f // opt 62.5f
+#define CurvaExterior2Coche2 40.9f //58.0f // 48.9f
 #define CurvaExteriorAnguloRadianes (M_PI / 8)
 #define CurvaExteriorAnguloGrados 22.5f
 

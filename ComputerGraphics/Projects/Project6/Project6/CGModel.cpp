@@ -188,6 +188,7 @@ void CGModel::RenderScene()
 }
 
 
+
 void CGModel::Update()
 {
 	//Método que se encarga de dar animación a la escena
@@ -206,11 +207,11 @@ void CGModel::Update()
 			GLdouble dx = 0, dz = 0;
 			Dist_CocheX1 = Dist_CocheX1 + Dist_Recorrida1;
 
-			if (Dist_CocheX1 <= LongRecta){
+			if (Dist_CocheX1 <= LongRecta) {
 				Coche1->Translate(glm::vec3(0, -Dist_Recorrida1, 0));
 				posBeg -= glm::vec3(0, -Dist_Recorrida1, 0);
 			}
-			else{
+			else {
 				Dist_Recorrida1 = 0;
 				Indice_1++;
 				Dist_CocheX1 = 0;
@@ -218,25 +219,25 @@ void CGModel::Update()
 				posBeg -= glm::vec3(0, -Dist_Recorrida1, 0);
 			}
 		}
-		if (Pistas[Indice_1][0] == 2){
+		if (Pistas[Indice_1][0] == 2) {
 			if (velocidad < 7 && velocidad != 0) velocidad++;
 			Dist_CocheX1 = Dist_CocheX1 + Dist_Recorrida1;
 
-			if (Dist_CocheX1 <= LongMediaRecta){
+			if (Dist_CocheX1 <= LongMediaRecta) {
 				Coche1->Translate(glm::vec3(0, -Dist_Recorrida1, 0));
 			}
-			else{
+			else {
 				Dist_Recorrida1 = 0;
 				Indice_1++;
 				Dist_CocheX1 = 0;
 				Coche1->Translate(glm::vec3(0, -Dist_Recorrida1, 0));
 			}
 		}
-		if (Pistas[Indice_1][0] == 3){
+		if (Pistas[Indice_1][0] == 3) {
 			if (velocidad < 7 && velocidad != 0) velocidad++;
 			Dist_CocheX1 = Dist_CocheX1 + Dist_Recorrida1;
 
-			if (Dist_CocheX1 <= LongCuartoRecta){
+			if (Dist_CocheX1 <= LongCuartoRecta) {
 				Coche1->Translate(glm::vec3(0, -Dist_Recorrida1, 0));
 			}
 			else
@@ -258,7 +259,7 @@ void CGModel::Update()
 			if (velocidad > 7 && velocidad != 0)
 				velocidad = velocidad - 3;
 
-			if (t == 1){ // 1
+			if (t == 1) { // 1
 				// todo revisar desplazamiento curva
 				GLdouble x = 0, z = 0, dx = 0, dz = 0;;
 				GLdouble angulo = 0;
@@ -612,7 +613,7 @@ void CGModel::Update()
 				Coche2->desplazamiento_curva(x, z, CurvaExterior2Coche2, CurvaExteriorAnguloRadianes);
 				Dist_CocheX2 = Dist_CocheX2 + Dist_Recorrida2;
 				Dist_CocheZ2 = Dist_CocheZ2 + Dist_Recorrida2;
-				angulo = angulo + (((CurvaExteriorAnguloGrados) * Dist_Recorrida2) / x);
+				angulo = angulo + (((CurvaExteriorAnguloGrados)*Dist_Recorrida2) / x);
 				GLdouble ang = (angulo * (CurvaExteriorAnguloRadianes)) / CurvaExteriorAnguloGrados;
 				Coche2->desplazamiento_curva(dx, dz, CurvaExterior2Coche2, ang);
 
@@ -658,30 +659,33 @@ void CGModel::Update()
 			}
 		}
 	}
-	if (seleccion == 1){
+	if (seleccion == 1) {
 		// Obtener la matriz de transformación del coche
 		loc = Coche1->GetLocation();
-		/*glm::mat4 car_location = Coche1->GetLocation();
-
-		// Crear una matriz de transformación que desplace la cámara hacia arriba y hacia atrás
-		//glm::mat4 cameraTranslation = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 2.0f, -5.0f));
-		glm::mat4 cameraTranslation = glm::translate(car_location, glm::vec3(0.0f, 2.0f, -5.0f));
-		
-		// Combinar la matriz de transformación de la cámara con la matriz de vista inversa del coche
-		//glm::mat4 view = glm::inverse(cameraTranslation * car_location);
-		glm::mat4 view = glm::inverse(cameraTranslation);
+		// glm::mat4 car_location = Coche1->GetLocation();
+		 
+		// tutoria hoy
+		glm::mat4 matriz = glm::translate(loc, glm::vec3(0.0f, 5.0f, 2.0f));
+		//glm::mat4 inversa = glm::rotate;
+		//glm::mat4 inversa = glm::inverse(cameraTranslation);
 
 		// Actualizar la posición y dirección de la cámara con la nueva matriz de vista
-		camera->SetPosition(view[3][0], view[3][1], view[3][2]);
-		camera->SetDirection(view[1][0], view[1][1], view[1][2], view[2][0], view[2][1], view[2][2]);*/
-		camera->SetPosition(loc[3][0] - 0.0f, loc[3][1] + 2.0f, loc[3][2] - 0.0f);
+		camera->SetPosition(matriz[3][0], matriz[3][1], matriz[3][2]);
+		//camera->SetDirection(inversa[1][0], inversa[1][1], inversa[1][2], inversa[2][0], inversa[2][1], inversa[2][2]);
+		
+		//camera->SetPosition(loc[3][0] - 0.0f, loc[3][1] + 2.0f, loc[3][2] - 0.0f);
 		camera->SetDirection(loc[1][0], loc[1][1], loc[1][2], loc[2][0], loc[2][1], loc[2][2]);
 
 		// get location del coche y modificar en y y z -> getloca del coche, transl a lo que se quiera modif y luego la inversa
 	}
-	if (seleccion == 2){
+	if (seleccion == 2) {
 		loc = Coche2->GetLocation();
-		camera->SetPosition(loc[3][0] - 0.0f, loc[3][1] + 2.0f, loc[3][2] - 0.0f);
+
+		glm::mat4 matriz = glm::translate(loc, glm::vec3(0.0f, 5.0f, 2.0f));
+		camera->SetPosition(matriz[3][0], matriz[3][1], matriz[3][2]);
+
+		camera->SetPosition(matriz[3][0], matriz[3][1], matriz[3][2]);
+		//camera->SetPosition(loc[3][0] - 0.0f, loc[3][1] + 2.0f, loc[3][2] - 0.0f);
 		camera->SetDirection(loc[1][0], loc[1][1], loc[1][2], loc[2][0], loc[2][1], loc[2][2]);
 	}
 }
