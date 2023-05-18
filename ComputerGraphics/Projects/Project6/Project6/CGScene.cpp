@@ -46,9 +46,6 @@ CGScene::CGScene()
 	GLuint contador = 0;
 	GLfloat vx1 = 0, vx2 = 0, vz1 = 0, vz2 = 0;
 
-	skybox = new CGSkybox();
-	ground = new CGGround(LongRecta, 15.6f, contador, vx1, vx2, vz1, vz2);
-
 	glm::vec3 Ldir = glm::vec3(1.0f, -0.8f, -1.0f);
 	Ldir = glm::normalize(Ldir);
 
@@ -57,6 +54,9 @@ CGScene::CGScene()
 	light->SetAmbientLight(glm::vec3(0.2f, 0.2f, 0.2f));
 	light->SetDifusseLight(glm::vec3(0.8f, 0.8f, 0.8f));
 	light->SetSpecularLight(glm::vec3(1.0f, 1.0f, 1.0f));
+
+	skybox = new CGSkybox();
+	ground = new CGGround(LongRecta, 15.6f, contador, vx1, vx2, vz1, vz2);
 
 	//1 = recta estandar
 	//2 = media recta 

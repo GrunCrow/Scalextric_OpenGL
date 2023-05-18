@@ -1,12 +1,10 @@
-#ifndef SHADER_PROGRAM_H
-
-#define SHADER_PROGRAM_H
+#pragma once
 
 #include <GL/glew.h>
 #include <glm/glm.hpp>
 
 //
-// CLASE: ShaderProgram
+// CLASE: CGShaderProgram
 //
 // DESCRIPCIÓN: Clase que desarrolla un programa GLSL
 // 
@@ -18,8 +16,7 @@ private:
 	GLboolean linked;
 	char* logInfo;
 
-	char** GetVertexShaderFromResource();
-	char** GetFragmentShaderFromResource();
+	char** GetShaderCodeFromResource(int idr);
 
 public:
 	CGShaderProgram();
@@ -32,9 +29,7 @@ public:
 	GLvoid SetUniformVec3(const char* name, glm::vec3 m);
 	GLvoid SetUniformMatrix4(const char* name, glm::mat4 m);
 	GLvoid SetUniformI(const char* name, GLint i);
-	// ShadowMap
 	GLvoid SetVertexShaderUniformSubroutine(const char* name);
 	GLvoid SetFragmentShaderUniformSubroutine(const char* name);
 };
 
-#endif

@@ -61,6 +61,8 @@ private:
 
 	GLuint shadowFBO;
 	GLuint depthTexId;
+	GLsizei wndWidth;
+	GLsizei wndHeight;
 
 	bool InitShadowMap();
 };

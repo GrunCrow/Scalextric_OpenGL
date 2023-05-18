@@ -24,7 +24,6 @@
 #include "CGScene.h"
 #include "CGShaderProgram.h"
 #include "car.h"
-#include "CGApplication.h"
 
 
 #include <iostream>
@@ -68,14 +67,29 @@ void CGModel::Initialize(GLsizei w, GLsizei h)
 	//Método que inicializa el modelo 3D a generar
 
 
-		// Parte para crear el programa
+	// Crear el programa
 	program = new CGShaderProgram();
 	if (program->IsLinked() == GL_TRUE) program->Use();
-	else printError(program->GetLog());
+	else std::cout << program->GetLog() << std::endl;
+
+	// Crear la "camera"
+	camera = new CGCamera();
+	camera->SetPosition(0.0f, 5.0f, 30.0f);
+
+	// Parte para inicializar las posiciones de las figuras (coche y coche2)
+	scene = new CGScene();
+
+	// Crea el Framebuffer de la sombra
+	bool frameBufferStatus = InitShadowMap();
+	if (!frameBufferStatus) std::cout << "FrameBuffer incompleto" << std::endl;
+
+
+	// Asocia el viewport y el Clipping Volume
+	ReSize(w, h);
 
 
 	// Parte para cargar la textura
-	GLuint textureId;
+	/*GLuint textureId;
 	glGenTextures(1, &textureId);
 	glActiveTexture(GL_TEXTURE0);
 	// AÑADIDO:
@@ -83,37 +97,32 @@ void CGModel::Initialize(GLsizei w, GLsizei h)
 	//glEnable(GL_TEXTURE_2D);
 
 	InitTexture(textureId, "textures/Road/RectaStd.jpg");
-	program->SetUniformI("BaseTex", 0);
+	program->SetUniformI("BaseTex", 0);*/
 
-	// Parte para crear la "camera"
-	camera = new CGCamera();
+	
 
-	camera->SetPosition(0.0f, 5.0f, 30.0f);
-
-	posBeg = camera->GetPosition();
-	dirBeg = camera->GetDirection();
+	//posBeg = camera->GetPosition();
+	//dirBeg = camera->GetDirection();
 
 	// Parte para crear la matriz View de la "camera"
-	view = camera->ViewMatrix();
+	//view = camera->ViewMatrix();
 
-	// Parte para inicializar las posiciones de las figuras (coche y coche2)
-	scene = new CGScene();
+	
 
-	Coche1 = new car();
+	/*Coche1 = new car();
 	Coche1->Translate(glm::vec3(0, 1.0f, 3.9f));
 	Coche1->Rotate(90, glm::vec3(0.0f, 0.0f, 1.0f));
 	Coche1->Rotate(90, glm::vec3(0.0f, 1.0f, 0.0f));
 	Coche2 = new car();
 	Coche2->Translate(glm::vec3(0.0f, 1.0f, -3.9f));
 	Coche2->Rotate(90, glm::vec3(0.0f, 0.0f, 1.0f));
-	Coche2->Rotate(90, glm::vec3(0.0f, 1.0f, 0.0f));
+	Coche2->Rotate(90, glm::vec3(0.0f, 1.0f, 0.0f));*/
 
 
-	// Parte que asocia el viewport y el Clipping Volume
-	ReSize(w, h);
+	
 
 
-	// Parte para las opciones del dibujo
+	// Opciones del dibujo
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE);	
 	glFrontFace(GL_CCW);
@@ -122,10 +131,10 @@ void CGModel::Initialize(GLsizei w, GLsizei h)
 
 
 	// Parte del antialiasing
-	glEnable(GL_BLEND);
+	/*glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_POLYGON_SMOOTH);
-	loc = Coche1->GetLocation();
+	loc = Coche1->GetLocation();*/
 }
 
 
@@ -172,11 +181,19 @@ void CGModel::ReSize(GLsizei w, GLsizei h)
 	GLfloat wHeight = (GLfloat)(sin_fov * 0.2 / cos_fov);
 	GLfloat wWidth = wHeight * aspectRatio;
 
+	wndWidth = w;
+	wndHeight = h;
+
 	glViewport(0, 0, w, h);
 	projection = glm::frustum(-wWidth, wWidth, -wHeight, wHeight, 0.2f, 2000.0f);
 }
 
 
+//
+// FUNCIÓN: CGModel::InitShadowMap()
+//
+// PROPÓSITO: Inicializa el FBO para almacenar la textura de sombre
+//
 bool CGModel::InitShadowMap()
 {
 	GLfloat border[] = { 1.0f, 1.0f, 1.0f, 1.0f };
@@ -256,20 +273,21 @@ void CGModel::RenderScene()
 	program->SetUniformI("ShadowMap", 0);
 
 	// Asigna el viewport
-	glViewport(0, 0, WIDTH, HEIGHT);
+	glViewport(0, 0, wndWidth, wndHeight);
 
 	// Dibuja la escena
-	scene->Draw(program, lightPerspective, lightViewMatrix, lightMVP);
+	glm::mat4 viewMatrix = camera->ViewMatrix();
+	scene->Draw(program, projection, viewMatrix, lightMVP);
 
 	//Método que genera la imagen
-	glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	//glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	
 	// Dibuja la escena
-	view = camera->ViewMatrix();
+	/*view = camera->ViewMatrix();
 	scene->Draw(program, projection, view, lightMVP);
 	Coche1->Draw(program, projection, view, lightMVP);
-	Coche2->Draw(program, projection, view, lightMVP);
+	Coche2->Draw(program, projection, view, lightMVP);*/
 }
 
 
