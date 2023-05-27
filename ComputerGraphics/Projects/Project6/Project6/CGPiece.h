@@ -47,7 +47,7 @@ public:
 	glm::mat4 GetLocation();
 	void Translate(glm::vec3 t);
 	void Rotate(GLfloat angle, glm::vec3 axis);
-	void Draw(CGShaderProgram* program, glm::mat4 projection, glm::mat4 view, glm::mat4 model);
+	void Draw(CGShaderProgram* program, glm::mat4 projection, glm::mat4 view, glm::mat4 model, glm::mat4 shadowViewMatrix);
 };
 
 #endif

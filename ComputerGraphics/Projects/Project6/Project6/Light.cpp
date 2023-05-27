@@ -37,3 +37,15 @@ void Light::SetUniforms(CGShaderProgram* program)
 	program->SetUniformVec3("Light.Ld", Ld);
 	program->SetUniformVec3("Light.Ls", Ls);
 }
+
+//shadowmap
+
+//
+// FUNCIÓN: CGLight::GetLightDirection()
+//
+// PROPÓSITO: Obtiene la dirección de la luz (expresada en coordenadas de modelo)
+//
+glm::vec3 Light::GetLightDirection()
+{
+	return Ldir;
+}

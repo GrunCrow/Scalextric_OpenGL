@@ -10,7 +10,7 @@ class CGSkybox {
 public:
 	CGSkybox();
 	~CGSkybox();
-	void Draw(CGShaderProgram* program, glm::mat4 projection, glm::mat4 view);
+	void Draw(CGShaderProgram* program, glm::mat4 projection, glm::mat4 view, glm::mat4 shadowViewMatrix);
 
 private:
 	GLuint cubemap;

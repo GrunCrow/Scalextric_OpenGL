@@ -58,6 +58,13 @@ private:
 
 	void InitTexture(GLuint id, const char* filename);
 	void CameraConstraints();
+
+	GLuint shadowFBO;
+	GLuint depthTexId;
+	GLsizei wndWidth;
+	GLsizei wndHeight;
+
+	bool InitShadowMap();
 };
 
 #endif

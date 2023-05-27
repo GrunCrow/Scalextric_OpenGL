@@ -3,7 +3,9 @@
  in vec3 Position;
  in vec3 Normal;
  in vec2 TexCoord;
+ in vec4 ShadowCoord;
 
+ uniform sampler2D ShadowMap;
  uniform sampler2D BaseTex;
  uniform mat4 ViewMatrix;
 
@@ -32,27 +34,46 @@
 	vec3 r = reflect(-s, n);
 	float dRate = max(dot(s, n), 0.0);
 	float sRate = pow(max(dot(r, v), 0.0), Material.Shininess);
-	vec3 ambient = Light.La * Material.Ka;
 	vec3 difusse = Light.Ld * Material.Kd * dRate;
 	vec3 specular = Light.Ls * Material.Ks * sRate;
-	return (ambient + difusse)*TexColor + specular;
+	return difusse*TexColor + specular;
  }
-
 
  out vec4 FragColor;
  uniform samplerCube CubemapTex;
  uniform bool DrawSkybox;
 
- void main()
+ subroutine void RenderPassType();
+ subroutine uniform RenderPassType RenderPass;
+
+ subroutine (RenderPassType)
+ void shadeWithShadow()
  {
    if(DrawSkybox)
    {
-    FragColor = texture(CubemapTex,Position);
+     FragColor = texture(CubemapTex,Position);
    }
    else
    {
- 	vec3 TexColor = vec3( texture(BaseTex,TexCoord) );
-	vec3 Color = ads(TexColor);
-	FragColor = vec4(Color,1.0);
+     vec4 TexColor = texture(BaseTex,TexCoord);
+     vec3 ambient = Light.La * Material.Ka * TexColor.rgb;
+     vec3 diffAndSpec = ads(TexColor.rgb);
+     float ShadowCoordX = (ShadowCoord.x/ShadowCoord.w) * 0.5 + 0.5;
+     float ShadowCoordY = (ShadowCoord.y/ShadowCoord.w) * 0.5 + 0.5;
+     float ShadowCoordZ = (ShadowCoord.z/ShadowCoord.w) * 0.5 + 0.5;
+     float shadowDepth = (texture(ShadowMap, vec2(ShadowCoordX,ShadowCoordY))).z;
+     float shadow = 1.0;
+     if(shadowDepth < ShadowCoordZ) shadow = 0;
+     FragColor = vec4(shadow * diffAndSpec+ ambient, TexColor.a);
    }
+ }
+
+ subroutine (RenderPassType)
+ void recordDepth()
+ {
+ }
+
+ void main()
+ {
+   RenderPass();
  }

@@ -32,3 +32,4 @@ public:
 	GLvoid SetVertexShaderUniformSubroutine(const char* name);
 	GLvoid SetFragmentShaderUniformSubroutine(const char* name);
 };
+

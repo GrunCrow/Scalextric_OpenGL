@@ -183,6 +183,11 @@ void CGShaderProgram::SetUniformI(const char* name, GLint i)
 	if (location >= 0) glUniform1i(location, i);
 }
 
+//
+// FUNCIÓN: CGShaderProgram::SetVertexShaderUniformSubroutine(const char * name)
+//
+// PROPÓSITO: Asigna una subrutina en el VertexShader
+//
 GLvoid CGShaderProgram::SetVertexShaderUniformSubroutine(const char* name)
 {
 	GLuint location = glGetSubroutineIndex(program, GL_VERTEX_SHADER, name);

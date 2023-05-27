@@ -67,14 +67,29 @@ void CGModel::Initialize(GLsizei w, GLsizei h)
 	//Método que inicializa el modelo 3D a generar
 
 
-		// Parte para crear el programa
+	// Crear el programa
 	program = new CGShaderProgram();
 	if (program->IsLinked() == GL_TRUE) program->Use();
-	else printError(program->GetLog());
+	else std::cout << program->GetLog() << std::endl;
+
+	// Crear la "camera"
+	camera = new CGCamera();
+	camera->SetPosition(0.0f, 5.0f, 30.0f);
+
+	// Parte para inicializar las posiciones de las figuras (coche y coche2)
+	scene = new CGScene();
+
+	// Crea el Framebuffer de la sombra
+	bool frameBufferStatus = InitShadowMap();
+	if (!frameBufferStatus) std::cout << "FrameBuffer incompleto" << std::endl;
+
+
+	// Asocia el viewport y el Clipping Volume
+	ReSize(w, h);
 
 
 	// Parte para cargar la textura
-	GLuint textureId;
+	/*GLuint textureId;
 	glGenTextures(1, &textureId);
 	glActiveTexture(GL_TEXTURE0);
 	// AÑADIDO:
@@ -82,12 +97,9 @@ void CGModel::Initialize(GLsizei w, GLsizei h)
 	//glEnable(GL_TEXTURE_2D);
 
 	InitTexture(textureId, "textures/Road/RectaStd.jpg");
-	program->SetUniformI("BaseTex", 0);
+	program->SetUniformI("BaseTex", 0);*/
 
-	// Parte para crear la "camera"
-	camera = new CGCamera();
-
-	camera->SetPosition(0.0f, 5.0f, 30.0f);
+	
 
 	posBeg = camera->GetPosition();
 	dirBeg = camera->GetDirection();
@@ -95,8 +107,7 @@ void CGModel::Initialize(GLsizei w, GLsizei h)
 	// Parte para crear la matriz View de la "camera"
 	view = camera->ViewMatrix();
 
-	// Parte para inicializar las posiciones de las figuras (coche y coche2)
-	scene = new CGScene();
+	
 
 	Coche1 = new car();
 	Coche1->Translate(glm::vec3(0, 1.0f, 3.9f));
@@ -106,13 +117,10 @@ void CGModel::Initialize(GLsizei w, GLsizei h)
 	Coche2->Translate(glm::vec3(0.0f, 1.0f, -3.9f));
 	Coche2->Rotate(90, glm::vec3(0.0f, 0.0f, 1.0f));
 	Coche2->Rotate(90, glm::vec3(0.0f, 1.0f, 0.0f));
+	
 
 
-	// Parte que asocia el viewport y el Clipping Volume
-	ReSize(w, h);
-
-
-	// Parte para las opciones del dibujo
+	// Opciones del dibujo
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE);	
 	glFrontFace(GL_CCW);
@@ -171,22 +179,113 @@ void CGModel::ReSize(GLsizei w, GLsizei h)
 	GLfloat wHeight = (GLfloat)(sin_fov * 0.2 / cos_fov);
 	GLfloat wWidth = wHeight * aspectRatio;
 
+	wndWidth = w;
+	wndHeight = h;
+
 	glViewport(0, 0, w, h);
 	projection = glm::frustum(-wWidth, wWidth, -wHeight, wHeight, 0.2f, 2000.0f);
 }
 
 
-void CGModel::RenderScene()
+//
+// FUNCIÓN: CGModel::InitShadowMap()
+//
+// PROPÓSITO: Inicializa el FBO para almacenar la textura de sombre
+//
+bool CGModel::InitShadowMap()
 {
-	//Método que genera la imagen
-	glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	view = camera->ViewMatrix();
-	scene->Draw(program, projection, view);
-	Coche1->Draw(program, projection, view);
-	Coche2->Draw(program, projection, view);
+	GLfloat border[] = { 1.0f, 1.0f, 1.0f, 1.0f };
+	GLsizei shadowMapWidth = 1024;
+	GLsizei shadowMapHeight = 1024;
+
+	glGenFramebuffers(1, &shadowFBO);
+	glBindFramebuffer(GL_FRAMEBUFFER, shadowFBO);
+
+	glGenTextures(1, &depthTexId);
+	glActiveTexture(GL_TEXTURE2);
+	glBindTexture(GL_TEXTURE_2D, depthTexId);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT24, shadowMapWidth,
+		shadowMapHeight, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+	glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, border);
+	glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, depthTexId, 0);
+
+	glDrawBuffer(GL_NONE);
+
+	bool result = true;
+	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+	{
+		result = false;
+	}
+
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+	return result;
 }
 
+
+void CGModel::RenderScene()
+{
+	//*********************************************************//
+  //                  Genera el ShadowMap                    //
+  //*********************************************************//
+	
+	// Asigna las matrices Viewport, View y Projection de la luz.
+	glm::mat4 lightViewMatrix = scene->GetLightViewMatrix();
+	glm::mat4 lightPerspective = glm::ortho(-150.0f, 150.0f, -150.0f, 150.0f, 0.0f, 400.0f);
+	glm::mat4 lightMVP = lightPerspective * lightViewMatrix;
+
+	// Activa el framebuffer de la sombra
+	glBindFramebuffer(GL_FRAMEBUFFER, shadowFBO);
+
+	// Limpia la información de profundidad
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	// Selecciona la subrutina recordDepth
+	program->SetFragmentShaderUniformSubroutine("recordDepth");
+
+	// Activa front-face culling
+	glCullFace(GL_FRONT);
+
+	//Asigna el viewport
+	glViewport(0, 0, 1024, 1024);
+
+	//*********************************************************//
+  //                  Dibuja la escena                       //
+  //*********************************************************//
+
+	// Activa el framebuffer de la imagen
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+	// Limpia el framebuffer
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	// Activa back-face culling
+	glCullFace(GL_BACK);
+
+	// Selecciona la subrutina shadeWithShadow
+	program->SetFragmentShaderUniformSubroutine("shadeWithShadow");
+	program->SetUniformI("ShadowMap", 2);
+
+	// Asigna el viewport
+	glViewport(0, 0, wndWidth, wndHeight);
+
+	// Dibuja la escena
+	view = camera->ViewMatrix();
+	scene->Draw(program, projection, view, lightMVP);
+
+	//Método que genera la imagen
+	//glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	
+	// Dibuja la escena
+	//scene->Draw(program, projection, view, lightMVP);
+	Coche1->Draw(program, projection, view, lightMVP);
+	Coche2->Draw(program, projection, view, lightMVP);
+}
 
 
 void CGModel::Update()
@@ -207,11 +306,11 @@ void CGModel::Update()
 			GLdouble dx = 0, dz = 0;
 			Dist_CocheX1 = Dist_CocheX1 + Dist_Recorrida1;
 
-			if (Dist_CocheX1 <= LongRecta) {
+			if (Dist_CocheX1 <= LongRecta){
 				Coche1->Translate(glm::vec3(0, -Dist_Recorrida1, 0));
 				posBeg -= glm::vec3(0, -Dist_Recorrida1, 0);
 			}
-			else {
+			else{
 				Dist_Recorrida1 = 0;
 				Indice_1++;
 				Dist_CocheX1 = 0;
@@ -219,25 +318,25 @@ void CGModel::Update()
 				posBeg -= glm::vec3(0, -Dist_Recorrida1, 0);
 			}
 		}
-		if (Pistas[Indice_1][0] == 2) {
+		if (Pistas[Indice_1][0] == 2){
 			if (velocidad < 7 && velocidad != 0) velocidad++;
 			Dist_CocheX1 = Dist_CocheX1 + Dist_Recorrida1;
 
-			if (Dist_CocheX1 <= LongMediaRecta) {
+			if (Dist_CocheX1 <= LongMediaRecta){
 				Coche1->Translate(glm::vec3(0, -Dist_Recorrida1, 0));
 			}
-			else {
+			else{
 				Dist_Recorrida1 = 0;
 				Indice_1++;
 				Dist_CocheX1 = 0;
 				Coche1->Translate(glm::vec3(0, -Dist_Recorrida1, 0));
 			}
 		}
-		if (Pistas[Indice_1][0] == 3) {
+		if (Pistas[Indice_1][0] == 3){
 			if (velocidad < 7 && velocidad != 0) velocidad++;
 			Dist_CocheX1 = Dist_CocheX1 + Dist_Recorrida1;
 
-			if (Dist_CocheX1 <= LongCuartoRecta) {
+			if (Dist_CocheX1 <= LongCuartoRecta){
 				Coche1->Translate(glm::vec3(0, -Dist_Recorrida1, 0));
 			}
 			else
@@ -259,7 +358,7 @@ void CGModel::Update()
 			if (velocidad > 7 && velocidad != 0)
 				velocidad = velocidad - 3;
 
-			if (t == 1) { // 1
+			if (t == 1){ // 1
 				// todo revisar desplazamiento curva
 				GLdouble x = 0, z = 0, dx = 0, dz = 0;;
 				GLdouble angulo = 0;
@@ -491,7 +590,7 @@ void CGModel::Update()
 
 		if (Pistas[Indice_2][0] == 4) // curva interior
 		{
-			std::cout << "Curva Interior";
+			// std::cout << "Curva Interior";
 			if (velocidad2 > 7 && velocidad2 != 0) velocidad2 - 3;
 
 			if (tt == 2)
@@ -547,7 +646,7 @@ void CGModel::Update()
 		}
 		if (Pistas[Indice_2][0] == 6) // curva estandar
 		{
-			std::cout << "Curva Estandar";
+			// std::cout << "Curva Estandar";
 			if (velocidad2 > 7 && velocidad2 != 0)velocidad2 - 3;
 
 			if (tt == 2)
@@ -603,17 +702,17 @@ void CGModel::Update()
 		}
 		if (Pistas[Indice_2][0] == 5) // curva exterior
 		{
-			std::cout << "Curva Exterior";
+			// std::cout << "Curva Exterior";
 			if (velocidad2 > 7 && velocidad2 != 0) velocidad2 - 3;
 			if (tt == 2)
 			{
-				std::cout << "2\n";
+				//std::cout << "2\n";
 				GLdouble x = 0, z = 0, dx = 0, dz = 0;;
 				GLdouble angulo = 0;
 				Coche2->desplazamiento_curva(x, z, CurvaExterior2Coche2, CurvaExteriorAnguloRadianes);
 				Dist_CocheX2 = Dist_CocheX2 + Dist_Recorrida2;
 				Dist_CocheZ2 = Dist_CocheZ2 + Dist_Recorrida2;
-				angulo = angulo + (((CurvaExteriorAnguloGrados)*Dist_Recorrida2) / x);
+				angulo = angulo + (((CurvaExteriorAnguloGrados) * Dist_Recorrida2) / x);
 				GLdouble ang = (angulo * (CurvaExteriorAnguloRadianes)) / CurvaExteriorAnguloGrados;
 				Coche2->desplazamiento_curva(dx, dz, CurvaExterior2Coche2, ang);
 
@@ -633,7 +732,7 @@ void CGModel::Update()
 			}
 			else
 			{
-				std::cout << "1\n";
+				// std::cout << "1\n";
 				GLdouble x = 0, z = 0, dx = 0, dz = 0;;
 				GLdouble angulo = 0;
 				Coche2->desplazamiento_curva(x, z, CurvaExterior1Coche2, CurvaExteriorAnguloRadianes);
@@ -662,31 +761,33 @@ void CGModel::Update()
 	if (seleccion == 1) {
 		// Obtener la matriz de transformación del coche
 		loc = Coche1->GetLocation();
-		// glm::mat4 car_location = Coche1->GetLocation();
-		 
-		// tutoria hoy
-		glm::mat4 matriz = glm::translate(loc, glm::vec3(0.0f, 5.0f, 2.0f));
-		//glm::mat4 inversa = glm::rotate;
-		//glm::mat4 inversa = glm::inverse(cameraTranslation);
+		/*glm::mat4 car_location = Coche1->GetLocation();
+
+		// Crear una matriz de transformación que desplace la cámara hacia arriba y hacia atrás
+		//glm::mat4 cameraTranslation = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 2.0f, -5.0f));
+		glm::mat4 cameraTranslation = glm::translate(car_location, glm::vec3(0.0f, 2.0f, -5.0f));
+
+		// Combinar la matriz de transformación de la cámara con la matriz de vista inversa del coche
+		//glm::mat4 view = glm::inverse(cameraTranslation * car_location);
+		glm::mat4 view = glm::inverse(cameraTranslation);
 
 		// Actualizar la posición y dirección de la cámara con la nueva matriz de vista
+		camera->SetPosition(view[3][0], view[3][1], view[3][2]);
+		camera->SetDirection(view[1][0], view[1][1], view[1][2], view[2][0], view[2][1], view[2][2]);*/
+		glm::mat4 matriz = glm::translate(loc, glm::vec3(0.0f, 8.0f, 2.0f));
 		camera->SetPosition(matriz[3][0], matriz[3][1], matriz[3][2]);
-		//camera->SetDirection(inversa[1][0], inversa[1][1], inversa[1][2], inversa[2][0], inversa[2][1], inversa[2][2]);
-		
-		//camera->SetPosition(loc[3][0] - 0.0f, loc[3][1] + 2.0f, loc[3][2] - 0.0f);
 		camera->SetDirection(loc[1][0], loc[1][1], loc[1][2], loc[2][0], loc[2][1], loc[2][2]);
+
 
 		// get location del coche y modificar en y y z -> getloca del coche, transl a lo que se quiera modif y luego la inversa
 	}
 	if (seleccion == 2) {
 		loc = Coche2->GetLocation();
-
-		glm::mat4 matriz = glm::translate(loc, glm::vec3(0.0f, 5.0f, 2.0f));
+		glm::mat4 matriz = glm::translate(loc, glm::vec3(0.0f, 8.0f, 2.0f));
 		camera->SetPosition(matriz[3][0], matriz[3][1], matriz[3][2]);
-
 		camera->SetPosition(matriz[3][0], matriz[3][1], matriz[3][2]);
-		//camera->SetPosition(loc[3][0] - 0.0f, loc[3][1] + 2.0f, loc[3][2] - 0.0f);
 		camera->SetDirection(loc[1][0], loc[1][1], loc[1][2], loc[2][0], loc[2][1], loc[2][2]);
+
 	}
 }
 
@@ -785,8 +886,8 @@ void CGModel::KeyboardAction(int virtualKey)
 			cam_pos_z = camera->GetPosition_Z();
 			cam_turn_step = camera->GetTurnStep();
 			// cam_direction = camera->GetDirection();
-			std::cout << cam_pos_x << " " << cam_pos_y << " " << cam_pos_z << std::endl;
-			std::cout << cam_turn_step << std::endl;
+			//std::cout << cam_pos_x << " " << cam_pos_y << " " << cam_pos_z << std::endl;
+			//std::cout << cam_turn_step << std::endl;
 			//std::cout << (camera->GetPosition()) << std::endl;
 			break;
 		case GLFW_KEY_F2: //VK_F2:
