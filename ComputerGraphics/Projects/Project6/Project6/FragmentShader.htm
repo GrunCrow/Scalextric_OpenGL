@@ -8,6 +8,7 @@
  uniform sampler2D ShadowMap;
  uniform sampler2D BaseTex;
  uniform mat4 ViewMatrix;
+
  struct LightInfo {
 	vec3 Ldir;
 	vec3 La;
@@ -22,6 +23,7 @@
 	vec3 Ks;
 	float Shininess;
  };
+
  uniform MaterialInfo Material;
 
  vec3 ads(vec3 TexColor) {
