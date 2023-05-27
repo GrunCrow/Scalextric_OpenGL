@@ -2,15 +2,15 @@
 <Project>
   <ProjectOutputs>
     <ProjectOutput>
-      <FullPath>C:\Users\albam\OneDrive - UNIVERSIDAD DE HUELVA\2. Universidad\4º Curso\2. 2º Cuatrimestre\Realidad Virtual\Prácticas\practica06 - shaders\ComputerGraphics\Projects\Project6\x64\Release\Project6.exe</FullPath>
+      <FullPath>C:\Users\albam\OneDrive - UNIVERSIDAD DE HUELVA\2. Universidad\4º Curso\2. 2º Cuatrimestre\Realidad Virtual\Prácticas\practica06\ComputerGraphics\Projects\Project6\x64\Release\Project6.exe</FullPath>
     </ProjectOutput>
   </ProjectOutputs>
   <ContentFiles>
     <ContentFile>
-      <FullPath>C:\Users\albam\OneDrive - UNIVERSIDAD DE HUELVA\2. Universidad\4º Curso\2. 2º Cuatrimestre\Realidad Virtual\Prácticas\practica06 - shaders\ComputerGraphics\Projects\Project6\Project6\FragmentShader.htm</FullPath>
+      <FullPath>C:\Users\albam\OneDrive - UNIVERSIDAD DE HUELVA\2. Universidad\4º Curso\2. 2º Cuatrimestre\Realidad Virtual\Prácticas\practica06\ComputerGraphics\Projects\Project6\Project6\FragmentShader.htm</FullPath>
     </ContentFile>
     <ContentFile>
-      <FullPath>C:\Users\albam\OneDrive - UNIVERSIDAD DE HUELVA\2. Universidad\4º Curso\2. 2º Cuatrimestre\Realidad Virtual\Prácticas\practica06 - shaders\ComputerGraphics\Projects\Project6\Project6\VertexShader.htm</FullPath>
+      <FullPath>C:\Users\albam\OneDrive - UNIVERSIDAD DE HUELVA\2. Universidad\4º Curso\2. 2º Cuatrimestre\Realidad Virtual\Prácticas\practica06\ComputerGraphics\Projects\Project6\Project6\VertexShader.htm</FullPath>
     </ContentFile>
   </ContentFiles>
   <SatelliteDlls />
