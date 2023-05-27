@@ -101,24 +101,22 @@ void CGModel::Initialize(GLsizei w, GLsizei h)
 
 	
 
-	//posBeg = camera->GetPosition();
-	//dirBeg = camera->GetDirection();
+	posBeg = camera->GetPosition();
+	dirBeg = camera->GetDirection();
 
 	// Parte para crear la matriz View de la "camera"
-	//view = camera->ViewMatrix();
+	view = camera->ViewMatrix();
 
 	
 
-	/*Coche1 = new car();
+	Coche1 = new car();
 	Coche1->Translate(glm::vec3(0, 1.0f, 3.9f));
 	Coche1->Rotate(90, glm::vec3(0.0f, 0.0f, 1.0f));
 	Coche1->Rotate(90, glm::vec3(0.0f, 1.0f, 0.0f));
 	Coche2 = new car();
 	Coche2->Translate(glm::vec3(0.0f, 1.0f, -3.9f));
 	Coche2->Rotate(90, glm::vec3(0.0f, 0.0f, 1.0f));
-	Coche2->Rotate(90, glm::vec3(0.0f, 1.0f, 0.0f));*/
-
-
+	Coche2->Rotate(90, glm::vec3(0.0f, 1.0f, 0.0f));
 	
 
 
@@ -131,10 +129,10 @@ void CGModel::Initialize(GLsizei w, GLsizei h)
 
 
 	// Parte del antialiasing
-	/*glEnable(GL_BLEND);
+	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_POLYGON_SMOOTH);
-	loc = Coche1->GetLocation();*/
+	loc = Coche1->GetLocation();
 }
 
 
@@ -204,7 +202,7 @@ bool CGModel::InitShadowMap()
 	glBindFramebuffer(GL_FRAMEBUFFER, shadowFBO);
 
 	glGenTextures(1, &depthTexId);
-	glActiveTexture(GL_TEXTURE0);
+	glActiveTexture(GL_TEXTURE2);
 	glBindTexture(GL_TEXTURE_2D, depthTexId);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT24, shadowMapWidth,
 		shadowMapHeight, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
@@ -270,24 +268,23 @@ void CGModel::RenderScene()
 
 	// Selecciona la subrutina shadeWithShadow
 	program->SetFragmentShaderUniformSubroutine("shadeWithShadow");
-	program->SetUniformI("ShadowMap", 0);
+	program->SetUniformI("ShadowMap", 2);
 
 	// Asigna el viewport
 	glViewport(0, 0, wndWidth, wndHeight);
 
 	// Dibuja la escena
-	glm::mat4 viewMatrix = camera->ViewMatrix();
-	scene->Draw(program, projection, viewMatrix, lightMVP);
+	view = camera->ViewMatrix();
+	scene->Draw(program, projection, view, lightMVP);
 
 	//Método que genera la imagen
 	//glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	
 	// Dibuja la escena
-	/*view = camera->ViewMatrix();
-	scene->Draw(program, projection, view, lightMVP);
+	//scene->Draw(program, projection, view, lightMVP);
 	Coche1->Draw(program, projection, view, lightMVP);
-	Coche2->Draw(program, projection, view, lightMVP);*/
+	Coche2->Draw(program, projection, view, lightMVP);
 }
 
 
@@ -593,7 +590,7 @@ void CGModel::Update()
 
 		if (Pistas[Indice_2][0] == 4) // curva interior
 		{
-			std::cout << "Curva Interior";
+			// std::cout << "Curva Interior";
 			if (velocidad2 > 7 && velocidad2 != 0) velocidad2 - 3;
 
 			if (tt == 2)
@@ -649,7 +646,7 @@ void CGModel::Update()
 		}
 		if (Pistas[Indice_2][0] == 6) // curva estandar
 		{
-			std::cout << "Curva Estandar";
+			// std::cout << "Curva Estandar";
 			if (velocidad2 > 7 && velocidad2 != 0)velocidad2 - 3;
 
 			if (tt == 2)
@@ -705,11 +702,11 @@ void CGModel::Update()
 		}
 		if (Pistas[Indice_2][0] == 5) // curva exterior
 		{
-			std::cout << "Curva Exterior";
+			// std::cout << "Curva Exterior";
 			if (velocidad2 > 7 && velocidad2 != 0) velocidad2 - 3;
 			if (tt == 2)
 			{
-				std::cout << "2\n";
+				//std::cout << "2\n";
 				GLdouble x = 0, z = 0, dx = 0, dz = 0;;
 				GLdouble angulo = 0;
 				Coche2->desplazamiento_curva(x, z, CurvaExterior2Coche2, CurvaExteriorAnguloRadianes);
@@ -735,7 +732,7 @@ void CGModel::Update()
 			}
 			else
 			{
-				std::cout << "1\n";
+				// std::cout << "1\n";
 				GLdouble x = 0, z = 0, dx = 0, dz = 0;;
 				GLdouble angulo = 0;
 				Coche2->desplazamiento_curva(x, z, CurvaExterior1Coche2, CurvaExteriorAnguloRadianes);
@@ -761,7 +758,7 @@ void CGModel::Update()
 			}
 		}
 	}
-	if (seleccion == 1){
+	if (seleccion == 1) {
 		// Obtener la matriz de transformación del coche
 		loc = Coche1->GetLocation();
 		/*glm::mat4 car_location = Coche1->GetLocation();
@@ -769,7 +766,7 @@ void CGModel::Update()
 		// Crear una matriz de transformación que desplace la cámara hacia arriba y hacia atrás
 		//glm::mat4 cameraTranslation = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 2.0f, -5.0f));
 		glm::mat4 cameraTranslation = glm::translate(car_location, glm::vec3(0.0f, 2.0f, -5.0f));
-		
+
 		// Combinar la matriz de transformación de la cámara con la matriz de vista inversa del coche
 		//glm::mat4 view = glm::inverse(cameraTranslation * car_location);
 		glm::mat4 view = glm::inverse(cameraTranslation);
@@ -777,15 +774,20 @@ void CGModel::Update()
 		// Actualizar la posición y dirección de la cámara con la nueva matriz de vista
 		camera->SetPosition(view[3][0], view[3][1], view[3][2]);
 		camera->SetDirection(view[1][0], view[1][1], view[1][2], view[2][0], view[2][1], view[2][2]);*/
-		camera->SetPosition(loc[3][0] - 0.0f, loc[3][1] + 2.0f, loc[3][2] - 0.0f);
+		glm::mat4 matriz = glm::translate(loc, glm::vec3(0.0f, 8.0f, 2.0f));
+		camera->SetPosition(matriz[3][0], matriz[3][1], matriz[3][2]);
 		camera->SetDirection(loc[1][0], loc[1][1], loc[1][2], loc[2][0], loc[2][1], loc[2][2]);
+
 
 		// get location del coche y modificar en y y z -> getloca del coche, transl a lo que se quiera modif y luego la inversa
 	}
-	if (seleccion == 2){
+	if (seleccion == 2) {
 		loc = Coche2->GetLocation();
-		camera->SetPosition(loc[3][0] - 0.0f, loc[3][1] + 2.0f, loc[3][2] - 0.0f);
+		glm::mat4 matriz = glm::translate(loc, glm::vec3(0.0f, 8.0f, 2.0f));
+		camera->SetPosition(matriz[3][0], matriz[3][1], matriz[3][2]);
+		camera->SetPosition(matriz[3][0], matriz[3][1], matriz[3][2]);
 		camera->SetDirection(loc[1][0], loc[1][1], loc[1][2], loc[2][0], loc[2][1], loc[2][2]);
+
 	}
 }
 
@@ -884,8 +886,8 @@ void CGModel::KeyboardAction(int virtualKey)
 			cam_pos_z = camera->GetPosition_Z();
 			cam_turn_step = camera->GetTurnStep();
 			// cam_direction = camera->GetDirection();
-			std::cout << cam_pos_x << " " << cam_pos_y << " " << cam_pos_z << std::endl;
-			std::cout << cam_turn_step << std::endl;
+			//std::cout << cam_pos_x << " " << cam_pos_y << " " << cam_pos_z << std::endl;
+			//std::cout << cam_turn_step << std::endl;
 			//std::cout << (camera->GetPosition()) << std::endl;
 			break;
 		case GLFW_KEY_F2: //VK_F2:

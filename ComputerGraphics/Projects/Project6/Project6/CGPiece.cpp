@@ -105,10 +105,11 @@ void CGPiece::Draw(CGShaderProgram * program, glm::mat4 projection, glm::mat4 vi
 	glm::mat4 mvp = projection*view*model*location;
 	program->SetUniformMatrix4("MVP", mvp);
 	program->SetUniformMatrix4("ViewMatrix", view);
-	program->SetUniformMatrix4("ModelViewMatrix", view*model*location);
+	program->SetUniformMatrix4("ModelViewMatrix", view * model * location);
 	
 	// Shadow map
-	program->SetUniformMatrix4("ShadowMatrix", shadowViewMatrix * location);
+	// program->SetUniformMatrix4("ShadowMatrix", shadowViewMatrix * location);
+	program->SetUniformMatrix4("ShadowMatrix", shadowViewMatrix * model * location);
 	
 	material->SetUniforms(program);
 

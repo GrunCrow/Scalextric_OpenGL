@@ -7,7 +7,7 @@
 car::car()
 {
 	CGMaterial* mtl0 = new CGMaterial();
-	mtl0->SetAmbientReflect(0.0f, 0.0f, 0.0f);
+	mtl0->SetAmbientReflect(1.0f, 1.0f, 1.0f);
 	mtl0->SetDifusseReflect(1.0f, 1.0f, 1.0f);
 	mtl0->SetSpecularReflect(0.0f, 0.0f, 0.0f);
 	mtl0->SetShininess(2.0f);
@@ -15,7 +15,7 @@ car::car()
 	//mtl0->InitTexture("textures/Car/Tororosso/tr0_main.tga");
 
 	CGMaterial* mtl1 = new CGMaterial();
-	mtl1->SetAmbientReflect(0.0f, 0.0f, 0.0f);
+	mtl1->SetAmbientReflect(1.0f, 1.0f, 1.0f);
 	mtl1->SetDifusseReflect(1.0f, 1.0f, 1.0f);
 	mtl1->SetSpecularReflect(0.0f, 0.0f, 0.0f);
 	mtl1->SetShininess(2.0f);
@@ -23,7 +23,7 @@ car::car()
 	//mtl1->InitTexture("textures/Car/Tororosso/generic_main.tga");
 
 	CGMaterial* mtl2 = new CGMaterial();
-	mtl2->SetAmbientReflect(0.0f, 0.0f, 0.0f);
+	mtl2->SetAmbientReflect(1.0f, 1.0f, 1.0f);
 	mtl2->SetDifusseReflect(1.0f, 1.0f, 1.0f);
 	mtl2->SetSpecularReflect(0.0f, 0.0f, 0.0f);
 	mtl2->SetShininess(2.0f);
@@ -31,7 +31,7 @@ car::car()
 	//mtl2->InitTexture("textures/Car/Tororosso/tr0_wheel.tga");
 
 	CGMaterial* mtl3 = new CGMaterial();
-	mtl3->SetAmbientReflect(0.0f, 0.0f, 0.0f);
+	mtl3->SetAmbientReflect(1.0f, 1.0f, 1.0f);
 	mtl3->SetDifusseReflect(1.0f, 1.0f, 1.0f);
 	mtl3->SetSpecularReflect(0.0f, 0.0f, 0.0f);
 	mtl3->SetShininess(2.0f);
@@ -39,7 +39,7 @@ car::car()
 	//mtl3->InitTexture("textures/Car/Tororosso/light_glow.tga");
 
 	CGMaterial* mtl4 = new CGMaterial();
-	mtl4->SetAmbientReflect(0.0f, 0.0f, 0.0f);
+	mtl4->SetAmbientReflect(1.0f, 1.0f, 1.0f);
 	mtl4->SetDifusseReflect(1.0f, 1.0f, 1.0f);
 	mtl4->SetSpecularReflect(0.0f, 0.0f, 0.0f);
 	mtl4->SetShininess(2.0f);
@@ -47,7 +47,7 @@ car::car()
 	//mtl4->InitTexture("textures/Car/Tororosso/tyre.tga");
 
 	CGMaterial* mtl5 = new CGMaterial();
-	mtl5->SetAmbientReflect(0.0f, 0.0f, 0.0f);
+	mtl5->SetAmbientReflect(1.0f, 1.0f, 1.0f);
 	mtl5->SetDifusseReflect(1.0f, 1.0f, 1.0f);
 	mtl5->SetSpecularReflect(0.0f, 0.0f, 0.0f);
 	mtl5->SetShininess(2.0f);
@@ -55,7 +55,7 @@ car::car()
 	//mtl5->InitTexture("textures/Car/Tororosso/tread_slick.tga");
 
 	CGMaterial* mtl6 = new CGMaterial();
-	mtl6->SetAmbientReflect(0.0f, 0.0f, 0.0f);
+	mtl6->SetAmbientReflect(1.0f, 1.0f, 1.0f);
 	mtl6->SetDifusseReflect(1.0f, 1.0f, 1.0f);
 	mtl6->SetSpecularReflect(0.0f, 0.0f, 0.0f);
 	mtl6->SetShininess(2.0f);
